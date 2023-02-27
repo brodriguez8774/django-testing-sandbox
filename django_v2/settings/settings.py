@@ -31,6 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Project apps.
+    'test_app.apps.TestAppConfig',
+
+    # Built-in Django apps.
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

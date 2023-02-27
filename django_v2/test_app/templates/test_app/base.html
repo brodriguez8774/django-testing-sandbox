@@ -3,7 +3,12 @@
 
 <head>
   <meta charset="utf-8"/>
-  <title>Test App Title</title>
+  <title>
+    Django v2.2 -
+    {% block title %}
+      Test App Title
+    {% endblock title %}
+  </title>
 
   {% block stylesheets %}{% endblock stylesheets %}
   {% block scripts %}{% endblock scripts %}
@@ -23,7 +28,7 @@
   {% block body %}
     <h1>
       {% block page_header %}
-        Test Page Header
+        Django LTS v2.2 - Test Page Header
       {% endblock page_header %}
     </h1>
 
