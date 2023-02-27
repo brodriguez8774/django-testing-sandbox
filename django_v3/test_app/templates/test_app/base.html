@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8"/>
+  <title>Test App Title</title>
+
+  {% block stylesheets %}{% endblock stylesheets %}
+  {% block scripts %}{% endblock scripts %}
+</head>
+
+<body>
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+          {{ message }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% block body %}
+    <h1>
+      {% block page_header %}
+        Test Page Header
+      {% endblock page_header %}
+    </h1>
+
+    <h2>
+      {% block page_subheader %}
+        Test Page Subheader
+      {% endblock page_subheader %}
+    </h2>
+
+    <div>
+      {% block page_content %}
+        <p>Test Page content</p>
+      {% endblock page_content %}
+    </div>
+  {% endblock body%}
+</body>
+
+</html>
