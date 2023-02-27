@@ -1,0 +1,46 @@
+###
+ # Pipenv Package Declarations.
+ # This file is what Pipenv commands build off of.
+ ##
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+
+###
+ # Python version declaration.
+ ##
+[requires]
+python_version = "3.9"
+
+
+###
+ # General packages, installed via `pipenv sync`.
+ ##
+[packages]
+# General Django dependencies.
+django = "< 3.3.0"              # Core Django package, locked to latest 3.2 LTS.
+
+###
+ # Development and testing packages, installed via `pipenv sync --dev`.
+ ##
+[dev-packages]
+# General dev dependencies.
+django-debug-toolbar = "*"      # Displays helpful debug-toolbar on side of browser window.
+django-dump-die = "*"           # Dump-and-die debugging tool.
+
+# Syntax-checking dependencies.
+autopep8 = "*"                  # Auto-formats files for pep8 recommendations. See `setup.cfg` for our exceptions.
+flake8 = "*"                    # Wrapper for autopep8 that allows extra configuration, etc.
+pylint = "*"                    # Linter for Python syntax. Must be run in console via "pylint" command.
+pylint-django = "*"             # Improves code analysis for Django projects.
+pylint-plugin-utils = "*"       # Additional pylint functionality for things like Django and Celery.
+
+# Testing/Pytest dependencies.
+coverage = "*"                  # Outputs testing coverage data.
+django-expanded-test-cases = "*"    # Utilities for easier testing.
+freezegun = "*"                 # Allows "freezing" tests to specific datetimes, for consistent checking and output.
+pytest = "*"                    # Base Pytest package. Current preferred testing method.
+pytest-django = "*"             # Additional Pytest logic for Django support.
+pytest-xdist = "*"              # Additional Pytest features, such as multithreading and looping.
