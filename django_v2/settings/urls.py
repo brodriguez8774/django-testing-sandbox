@@ -22,4 +22,7 @@ urlpatterns = [
 
     # Basic/minimalistic Django application.
     path('test_app/', include('test_app.urls')),
+
+    # Default project root view.
+    path('', include('settings.root_url')),
 ]

@@ -1,0 +1,23 @@
+{% extends "test_app/base.html" %}
+
+
+{% block page_header %}
+  Django Test Project - LTS v3.2
+{% endblock page_header %}
+
+
+{% block page_subheader %}
+  Official LTS Support ends in April 2024
+{% endblock page_subheader %}
+
+
+{% block content %}
+  <ul>
+    <li>
+      <p><a href="{% url 'admin:index' %}">Admin Views</a></p>
+    </li>
+    <li>
+      <p><a href="{% url 'test_app:index' %}">Test App Views</a></p>
+    </li>
+  </ul>
+{% endblock content %}
