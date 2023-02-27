@@ -1,6 +1,11 @@
+"""
+Urls for Django v3.2 test project app.
+"""
 
+# Third-Party Imports.
 from django.urls import include, path
 
+# Internal Imports.
 from . import views
 
 

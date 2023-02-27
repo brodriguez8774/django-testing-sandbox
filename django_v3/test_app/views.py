@@ -1,4 +1,8 @@
+"""
+Views for Django v3.2 test project app.
+"""
 
+# Third-Party Imports.
 from django.shortcuts import render
 
 
