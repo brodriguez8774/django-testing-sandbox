@@ -133,6 +133,9 @@ node_modules/
 *.scss.map
 
 
+# Do not track migrations. Uncomment out to explicitly add them.
+*/*/migrations/0*.py
+
 
 ###
  # Project-specific ignores go below here.
