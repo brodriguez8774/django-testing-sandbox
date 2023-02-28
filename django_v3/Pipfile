@@ -21,6 +21,7 @@ python_version = "3.9"
 [packages]
 # General Django dependencies.
 django = "< 3.3.0"              # Core Django package, locked to latest 3.2 LTS.
+django-localflavor = "*"        # Easy implementation of localization info, such as addresses.
 
 ###
  # Development and testing packages, installed via `pipenv sync --dev`.
