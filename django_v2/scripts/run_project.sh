@@ -25,12 +25,25 @@ function main () {
     # Import corresponding virtual environment, if not already done.
     source ./.venv/bin/activate
 
+    # Ensure latest pip and wheel are installed.
+    pip install --upgrade pip
+    pip install --upgrade wheel
+
     # Ensure latest versions of all corresponding dependencies are installed.
     # Because this project is assumed to only be used in local development,
     # we only care about having a consistent Django major LTS version, and then
     # otherwise always wanting the latest versions/bugfixes of all other
     # corresponding packages used.
     pipenv install --dev
+
+    # Clear out migration files if any are present.
+    ./scripts/purge_migrations.sh
+
+    # Reset local database if present.
+    if [[ -f "./db.sqlite3" ]]
+    then
+        rm -f "./db.sqlite3"
+    fi
 
     # Make latest project migrations.
     python manage.py makemigrations
