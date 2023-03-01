@@ -28,6 +28,7 @@ django-localflavor = "*"        # Easy implementation of localization info, such
  ##
 [dev-packages]
 # General dev dependencies.
+django-adminlte2-pdq = "*"      # Adds framework for easily styling site like adminlte2.
 django-debug-toolbar = "*"      # Displays helpful debug-toolbar on side of browser window.
 django-dump-die = "*"           # Dump-and-die debugging tool.
 
