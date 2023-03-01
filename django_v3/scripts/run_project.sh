@@ -51,6 +51,9 @@ function main () {
     # Run project migrations.
     python manage.py migrate
 
+    # Generate project seeds.
+    python manage.py seed
+
     echo ""
     echo -e "${text_blue}Setup complete. Running project serve at ${text_orange}http://127.0.0.1:8032/${text_reset}"
     echo ""
