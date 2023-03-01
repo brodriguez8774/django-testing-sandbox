@@ -1,0 +1,16 @@
+{% extends "test_app/base.html" %}
+
+
+{% block page_header %}
+  Django LTS v4.1 - Test Permission Check
+{% endblock page_header %}
+
+
+{% block page_subheader %}
+  This view should require permission of "test_permission" to see.
+{% endblock page_subheader %}
+
+
+{% block content %}
+  <p><a href="{% url 'test_app:index' %}">Back to Test App Views</a></p>
+{% endblock content %}

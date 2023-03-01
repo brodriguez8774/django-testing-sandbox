@@ -4,7 +4,7 @@ Views for Django v2.2 test project app.
 
 # Third-Party Imports.
 from django.contrib.auth.decorators import login_required, permission_required
-from django.shortcuts import render
+from django.shortcuts import redirect, render, reverse
 
 
 # region Index/Root Views
@@ -26,16 +26,24 @@ def index(request):
 @login_required
 def view_with_login_check(request):
     """Test view with basic login check."""
-    return render(request, 'test_app/index.html')
+    return render(request, 'test_app/login_check.html')
 
-@permission_required('TODO: Add permission check')
+
+@permission_required('test_app.test_permission')
 def view_with_permission_check(request):
     """Test view with basic User permission check."""
-    return render(request, 'test_app/index.html')
+    return render(request, 'test_app/permission_check.html')
 
-# TODO: Add group check.
+
+@login_required
 def view_with_group_check(request):
     """Test view with basic User group check."""
-    return render(request, 'test_app/index.html')
+
+    # Check group.
+    user_groups = request.user.groups.all().values_list('name', flat=True)
+    if 'test_group' not in user_groups and not request.user.is_superuser:
+        return redirect(reverse('login'))
+
+    return render(request, 'test_app/group_check.html')
 
 # endregion Login/Permission Test Views

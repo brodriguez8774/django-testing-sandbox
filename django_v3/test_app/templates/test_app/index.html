@@ -3,3 +3,22 @@
 {% block page_header %}
   Django LTS v3.2 - Test App Index
 {% endblock page_header %}
+
+
+{% block content %}
+  <p>Test Page Content</p>
+  <ul>
+    <li>
+      <p><a href="{% url 'root_project_home_page:index' %}">Back to Django v2.2 Home</a></p>
+    </li>
+    <li>
+      <p><a href="{% url 'test_app:view_with_login_check' %}">Test App - Login Check Page</a></p>
+    </li>
+    <li>
+      <p><a href="{% url 'test_app:view_with_permission_check' %}">Test App - Permission Check Page</a></p>
+    </li>
+    <li>
+      <p><a href="{% url 'test_app:view_with_group_check' %}">Test App - Group Check Page</a></p>
+    </li>
+  </ul>
+{% endblock content %}

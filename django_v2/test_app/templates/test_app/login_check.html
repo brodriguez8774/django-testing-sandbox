@@ -1,0 +1,16 @@
+{% extends "test_app/base.html" %}
+
+
+{% block page_header %}
+  Django LTS v2.2 - Test Login Check
+{% endblock page_header %}
+
+
+{% block page_subheader %}
+  This view should require user login to see.
+{% endblock page_subheader %}
+
+
+{% block content %}
+  <p><a href="{% url 'test_app:index' %}">Back to Test App Views</a></p>
+{% endblock content %}
