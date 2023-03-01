@@ -133,6 +133,7 @@ class ModelTestCase(TestCase):
     def test__assert_login(self):
         """Verifies that expected user model properly logs in."""
         with self.subTest('Check login using super user'):
+            # Get response object.
             self.client.force_login(self.test_super_user)
             response = self.client.get(reverse('test_app:index'))
 
@@ -152,6 +153,7 @@ class ModelTestCase(TestCase):
             self.assertEqual(self.test_super_user, response.wsgi_request.user)
 
         with self.subTest('Check login using admin user'):
+            # Get response object.
             self.client.force_login(self.test_admin_user)
             response = self.client.get(reverse('test_app:index'))
 
@@ -171,6 +173,7 @@ class ModelTestCase(TestCase):
             self.assertEqual(self.test_admin_user, response.wsgi_request.user)
 
         with self.subTest('Check login using inactive user'):
+            # Get response object.
             self.client.force_login(self.test_inactive_user)
             response = self.client.get(reverse('test_app:index'))
 
@@ -197,6 +200,7 @@ class ModelTestCase(TestCase):
             self.assertNotEqual(self.test_inactive_user, uwsgi_user)
 
         with self.subTest('Check login using standard user'):
+            # Get response object.
             self.client.force_login(self.test_standard_user)
             response = self.client.get(reverse('test_app:index'))
 
@@ -222,6 +226,8 @@ class ModelTestCase(TestCase):
                 first_name='TestFirst',
                 last_name='TestLast',
             )
+
+            # Get response object.
             self.client.force_login(new_user)
             response = self.client.get(reverse('test_app:index'))
 
