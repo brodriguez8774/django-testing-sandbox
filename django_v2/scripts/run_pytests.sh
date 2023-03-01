@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ###
- # Script to quickly setup and locally serve project in one command.
+ # Script to quickly setup local project and run pytests in one command.
  ##
 
 
@@ -19,7 +19,7 @@ function main () {
     # Clear any current output in terminal.
     clear
 
-    echo -e "${text_blue}Starting project setup for Django v4.1 test environment...${text_reset}"
+    echo -e "${text_blue}Starting project setup for Django v2.2 test environment...${text_reset}"
     echo ""
 
     # Import corresponding virtual environment, if not already done.
@@ -52,7 +52,7 @@ function main () {
     python manage.py migrate
 
     echo ""
-    echo -e "${text_blue}Setup complete. Running project serve at ${text_orange}http://127.0.0.1:8041/${text_reset}"
+    echo -e "${text_blue}Setup complete. Running project pytests.${text_reset}"
     echo ""
     echo ""
     echo ""
@@ -60,7 +60,7 @@ function main () {
     echo ""
 
     # Run project serve.
-    python manage.py runserver 8041 $@
+    pytest $@
 
 }
 

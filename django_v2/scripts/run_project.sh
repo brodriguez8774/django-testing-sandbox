@@ -51,16 +51,18 @@ function main () {
     # Run project migrations.
     python manage.py migrate
 
-
-
     echo ""
     echo -e "${text_blue}Setup complete. Running project serve at ${text_orange}http://127.0.0.1:8022/${text_reset}"
     echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo ""
 
     # Run project serve.
-    python manage.py runserver 8022
+    python manage.py runserver 8022 $@
 
 }
 
 
-main
+main $@
