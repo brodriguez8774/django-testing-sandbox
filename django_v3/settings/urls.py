@@ -20,6 +20,9 @@ urlpatterns = [
     # Django Admin views.
     path('admin/', admin.site.urls),
 
+    # Django authentication views.
+    path('accounts/', include('django.contrib.auth.urls')),
+
     # Basic/minimalistic Django application.
     path('test_app/', include('test_app.urls')),
 
