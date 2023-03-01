@@ -140,3 +140,7 @@ node_modules/
 ###
  # Project-specific ignores go below here.
  ##
+
+# This is one of the few instances where we don't expect to ever use
+# this in production. So we can safely ignore Pipfile.lock files.
+*/Pipfile.lock
