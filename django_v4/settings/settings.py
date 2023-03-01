@@ -34,6 +34,15 @@ INSTALLED_APPS = [
     # Project apps.
     'test_app.apps.TestAppConfig',
 
+    # AdminLTE2 Package.
+    'adminlte2_pdq',
+
+    # DjangoDD Package.
+    'django_dump_die',
+
+    # DjangoETC Package.
+    'django_expanded_test_cases',
+
     # Built-in Django apps.
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,6 +53,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # Package middleware.
+    'django_dump_die.middleware.DumpAndDieMiddleware',
+
+    # Built-in Django middleware.
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
