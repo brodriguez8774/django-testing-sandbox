@@ -15,14 +15,34 @@ class User(AbstractUser):
     """Custom user model definition.
     Defined as per the Django docs. Not yet directly used.
     """
-    pass
+
+    def clean(self, *args, **kwargs):
+        """
+        Custom cleaning implementation. Includes validation, setting fields, etc.
+        """
+
+    def save(self, *args, **kwargs):
+        """
+        Modify model save behavior.
+        """
+        # Check if new model.
+        creating = False
+        if self._state.adding:
+            creating = True
+
+        # Call parent logic.
+        super().save(*args, **kwargs)
+
+        # If new model, generate corresponding UserProfile object.
+        if creating:
+            UserProfile.objects.create(user=self)
 
 
 class UserProfile(models.Model):
     """Basic model to act as a test fk to user model."""
 
     # Relationship Keys.
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
     # Model Fields.
     address_1 = models.CharField(max_length=MAX_LENGTH, blank=True)
