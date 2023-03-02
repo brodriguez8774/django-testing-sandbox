@@ -1,4 +1,4 @@
-# Django Test Projects
+# Django Testing Sandbox
 
 
 ## Description
@@ -27,3 +27,33 @@ Currently included in this project are:
 
 Version 4.1 currently included because 4.x LTS is not yet out.
 Will switch over once v4 LTS is released.
+
+
+## Running Project
+
+In each project version, there is a `scripts/run_project.sh` file and a `scripts/run_pytests.sh` file.
+
+Change directory into the corresponding desired django project version, create/load a virtual environment, then run the corresponding desired script.
+
+
+## Provided Testing Users
+
+Each project has logic to automatically create a handful of user models for testing purposes:
+* Super User:
+** Username: `test_superuser`
+** Email: `test_superuser@example.com`
+** Permissions: is_active, is_superuser
+* Admin User:
+** Username: `test_admin`
+** Email: `test_superuser@example.com`
+** Permissions: is_active, is_staff
+* Standard User:
+** Username: `test_inactive`
+** Email: `test_superuser@example.com`
+** Permissions: None
+* Inactive User:
+** Username: `test_user`
+** Email: `test_superuser@example.com`
+** Permissions: is_active
+
+All users can have the default password `temppass2`.
