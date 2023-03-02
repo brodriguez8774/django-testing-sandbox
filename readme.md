@@ -40,20 +40,20 @@ Change directory into the corresponding desired django project version, create/l
 
 Each project has logic to automatically create a handful of user models for testing purposes:
 * Super User:
-** Username: `test_superuser`
-** Email: `test_superuser@example.com`
-** Permissions: is_active, is_superuser
+    * Username: `test_superuser`
+    * Email: `test_superuser@example.com`
+    * Permissions: is_active, is_superuser
 * Admin User:
-** Username: `test_admin`
-** Email: `test_superuser@example.com`
-** Permissions: is_active, is_staff
+    * Username: `test_admin`
+    * Email: `test_superuser@example.com`
+    * Permissions: is_active, is_staff
 * Standard User:
-** Username: `test_inactive`
-** Email: `test_superuser@example.com`
-** Permissions: None
+    * Username: `test_inactive`
+    * Email: `test_superuser@example.com`
+    * Permissions: None
 * Inactive User:
-** Username: `test_user`
-** Email: `test_superuser@example.com`
-** Permissions: is_active
+    * Username: `test_user`
+    * Email: `test_superuser@example.com`
+    * Permissions: is_active
 
 All users can have the default password `temppass2`.
