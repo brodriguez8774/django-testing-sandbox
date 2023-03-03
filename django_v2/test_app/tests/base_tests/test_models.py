@@ -1,5 +1,7 @@
 """
 Model tests for Django v2.2 test project app.
+
+Uses base/built-in Django logic to execute.
 """
 
 # Third-Party Imports.
@@ -237,8 +239,12 @@ class ModelTestCase(TestCase):
 
             # Various checks, of different ways to ensure expected user is logged in.
             self.assertEqual(new_user.pk, int(self.client.session.get('_auth_user_id', None)))
+            self.assertFalse(isinstance(response.wsgi_request.user, AnonymousUser))
+            self.assertTrue(isinstance(response.wsgi_request.user, get_user_model()))
             self.assertEqual(new_user, response.wsgi_request.user)
 
             # Try again, to make sure that accessing any of the above values didn't somehow clear the client.
             self.assertEqual(new_user.pk, int(self.client.session.get('_auth_user_id', None)))
+            self.assertFalse(isinstance(response.wsgi_request.user, AnonymousUser))
+            self.assertTrue(isinstance(response.wsgi_request.user, get_user_model()))
             self.assertEqual(new_user, response.wsgi_request.user)

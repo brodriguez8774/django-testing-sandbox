@@ -1,20 +1,21 @@
 """
-Model tests for Django v4.1 test project app.
+Model tests for Django v3.2 test project app.
 
-Uses base/built-in Django logic to execute.
+Uses ETC package logic to execute.
+Should otherwise be fairly similar to the "base_tests", as a way to
+double-check that the ETC package functions as expected.
 """
 
 # Third-Party Imports.
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
-from django.shortcuts import reverse
-from django.test import TestCase
+from django_expanded_test_cases import IntegrationTestCase
 
 # Internal Imports.
 from test_app.models import UserProfile
 
 
-class ModelTestCase(TestCase):
+class ModelTestCase(IntegrationTestCase):
     """Tests for app models."""
 
     @classmethod
@@ -22,40 +23,6 @@ class ModelTestCase(TestCase):
         """Set up testing data."""
         # Call parent logic.
         super().setUpTestData()
-
-        # Generate user models.
-        cls.test_super_user = get_user_model().objects.create(
-            username='test_superuser',
-            first_name='SuperUserFirst',
-            last_name='SuperUserLast',
-            is_superuser=True,
-            is_staff=False,
-            is_active=True,
-        )
-        cls.test_admin_user = get_user_model().objects.create(
-            username='test_admin',
-            first_name='AdminUserFirst',
-            last_name='AdminUserLast',
-            is_superuser=False,
-            is_staff=True,
-            is_active=True,
-        )
-        cls.test_inactive_user = get_user_model().objects.create(
-            username='test_inactive',
-            first_name='InactiveUserFirst',
-            last_name='InactiveUserLast',
-            is_superuser=False,
-            is_staff=False,
-            is_active=False,
-        )
-        cls.test_standard_user = get_user_model().objects.create(
-            username='test_user',
-            first_name='UserFirst',
-            last_name='UserLast',
-            is_superuser=False,
-            is_staff=False,
-            is_active=True,
-        )
 
     def debug_data(self, response):
         print('\n\n\n\n')
@@ -93,18 +60,18 @@ class ModelTestCase(TestCase):
     def test__user_model_creation(self):
         """Verifies that expected user model properly generates."""
         with self.subTest('Check user creation using super user'):
-            self.assertIsNotNone(self.test_super_user.profile)
+            self.assertIsNotNone(self.test_superuser.profile)
 
             # Get corresponding auto-created profile model.
-            user_profile = UserProfile.objects.get(user=self.test_super_user)
-            self.assertEqual(user_profile, self.test_super_user.profile)
+            user_profile = UserProfile.objects.get(user=self.test_superuser)
+            self.assertEqual(user_profile, self.test_superuser.profile)
 
         with self.subTest('Check user creation using admin user'):
-            self.assertIsNotNone(self.test_admin_user.profile)
+            self.assertIsNotNone(self.test_admin.profile)
 
             # Get corresponding auto-created profile model.
-            user_profile = UserProfile.objects.get(user=self.test_admin_user)
-            self.assertEqual(user_profile, self.test_admin_user.profile)
+            user_profile = UserProfile.objects.get(user=self.test_admin)
+            self.assertEqual(user_profile, self.test_admin.profile)
 
         with self.subTest('Check user creation using inactive user'):
             self.assertIsNotNone(self.test_inactive_user.profile)
@@ -114,11 +81,11 @@ class ModelTestCase(TestCase):
             self.assertEqual(user_profile, self.test_inactive_user.profile)
 
         with self.subTest('Check user creation using standard user'):
-            self.assertIsNotNone(self.test_standard_user.profile)
+            self.assertIsNotNone(self.test_user.profile)
 
             # Get corresponding auto-created profile model.
-            user_profile = UserProfile.objects.get(user=self.test_standard_user)
-            self.assertEqual(user_profile, self.test_standard_user.profile)
+            user_profile = UserProfile.objects.get(user=self.test_user)
+            self.assertEqual(user_profile, self.test_user.profile)
 
         with self.subTest('Check user creation using new user'):
             new_user = get_user_model().objects.create(
@@ -136,48 +103,49 @@ class ModelTestCase(TestCase):
         """Verifies that expected user model properly logs in."""
         with self.subTest('Check login using super user'):
             # Get response object.
-            self.client.force_login(self.test_super_user)
-            response = self.client.get(reverse('test_app:index'))
+            response = self.assertGetResponse('test_app:index', user=self.test_superuser)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks, of different ways to ensure expected user is logged in.
-            self.assertEqual(self.test_super_user.pk, int(self.client.session.get('_auth_user_id', None)))
+            self.assertEqual(self.test_superuser.pk, int(self.client.session.get('_auth_user_id', None)))
             self.assertFalse(isinstance(response.wsgi_request.user, AnonymousUser))
             self.assertTrue(isinstance(response.wsgi_request.user, get_user_model()))
-            self.assertEqual(self.test_super_user, response.wsgi_request.user)
+            self.assertEqual(self.test_superuser, response.wsgi_request.user)
+            self.assertEqual(self.test_superuser, response.user)
 
             # Try again, to make sure that accessing any of the above values didn't somehow clear the client.
-            self.assertEqual(self.test_super_user.pk, int(self.client.session.get('_auth_user_id', None)))
+            self.assertEqual(self.test_superuser.pk, int(self.client.session.get('_auth_user_id', None)))
             self.assertFalse(isinstance(response.wsgi_request.user, AnonymousUser))
             self.assertTrue(isinstance(response.wsgi_request.user, get_user_model()))
-            self.assertEqual(self.test_super_user, response.wsgi_request.user)
+            self.assertEqual(self.test_superuser, response.wsgi_request.user)
+            self.assertEqual(self.test_superuser, response.user)
 
         with self.subTest('Check login using admin user'):
             # Get response object.
-            self.client.force_login(self.test_admin_user)
-            response = self.client.get(reverse('test_app:index'))
+            response = self.assertGetResponse('test_app:index', user=self.test_admin)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks, of different ways to ensure expected user is logged in.
-            self.assertEqual(self.test_admin_user.pk, int(self.client.session.get('_auth_user_id', None)))
+            self.assertEqual(self.test_admin.pk, int(self.client.session.get('_auth_user_id', None)))
             self.assertFalse(isinstance(response.wsgi_request.user, AnonymousUser))
             self.assertTrue(isinstance(response.wsgi_request.user, get_user_model()))
-            self.assertEqual(self.test_admin_user, response.wsgi_request.user)
+            self.assertEqual(self.test_admin, response.wsgi_request.user)
+            self.assertEqual(self.test_admin, response.user)
 
             # Try again, to make sure that accessing any of the above values didn't somehow clear the client.
-            self.assertEqual(self.test_admin_user.pk, int(self.client.session.get('_auth_user_id', None)))
+            self.assertEqual(self.test_admin.pk, int(self.client.session.get('_auth_user_id', None)))
             self.assertFalse(isinstance(response.wsgi_request.user, AnonymousUser))
             self.assertTrue(isinstance(response.wsgi_request.user, get_user_model()))
-            self.assertEqual(self.test_admin_user, response.wsgi_request.user)
+            self.assertEqual(self.test_admin, response.wsgi_request.user)
+            self.assertEqual(self.test_admin, response.user)
 
         with self.subTest('Check login using inactive user'):
             # Get response object.
-            self.client.force_login(self.test_inactive_user)
-            response = self.client.get(reverse('test_app:index'))
+            response = self.assertGetResponse('test_app:index', user=self.test_inactive_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
@@ -194,32 +162,35 @@ class ModelTestCase(TestCase):
             self.assertTrue(isinstance(uwsgi_user, AnonymousUser))
             self.assertFalse(isinstance(uwsgi_user, get_user_model()))
             self.assertNotEqual(self.test_inactive_user, uwsgi_user)
+            self.assertIsNone(response.user)
 
             # Try again, to make sure that accessing any of the above values didn't somehow clear the client.
             self.assertEqual(self.test_inactive_user.pk, int(self.client.session.get('_auth_user_id', None)))
             self.assertTrue(isinstance(uwsgi_user, AnonymousUser))
             self.assertFalse(isinstance(uwsgi_user, get_user_model()))
             self.assertNotEqual(self.test_inactive_user, uwsgi_user)
+            self.assertIsNone(response.user)
 
         with self.subTest('Check login using standard user'):
             # Get response object.
-            self.client.force_login(self.test_standard_user)
-            response = self.client.get(reverse('test_app:index'))
+            response = self.assertGetResponse('test_app:index', user=self.test_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks, of different ways to ensure expected user is logged in.
-            self.assertEqual(self.test_standard_user.pk, int(self.client.session.get('_auth_user_id', None)))
+            self.assertEqual(self.test_user.pk, int(self.client.session.get('_auth_user_id', None)))
             self.assertFalse(isinstance(response.wsgi_request.user, AnonymousUser))
             self.assertTrue(isinstance(response.wsgi_request.user, get_user_model()))
-            self.assertEqual(self.test_standard_user, response.wsgi_request.user)
+            self.assertEqual(self.test_user, response.wsgi_request.user)
+            self.assertEqual(self.test_user, response.user)
 
             # Try again, to make sure that accessing any of the above values didn't somehow clear the client.
-            self.assertEqual(self.test_standard_user.pk, int(self.client.session.get('_auth_user_id', None)))
+            self.assertEqual(self.test_user.pk, int(self.client.session.get('_auth_user_id', None)))
             self.assertFalse(isinstance(response.wsgi_request.user, AnonymousUser))
             self.assertTrue(isinstance(response.wsgi_request.user, get_user_model()))
-            self.assertEqual(self.test_standard_user, response.wsgi_request.user)
+            self.assertEqual(self.test_user, response.wsgi_request.user)
+            self.assertEqual(self.test_user, response.user)
 
         with self.subTest('Check login using new user'):
             # Generate user model.
@@ -230,8 +201,7 @@ class ModelTestCase(TestCase):
             )
 
             # Get response object.
-            self.client.force_login(new_user)
-            response = self.client.get(reverse('test_app:index'))
+            response = self.assertGetResponse('test_app:index', user=new_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
@@ -241,9 +211,11 @@ class ModelTestCase(TestCase):
             self.assertFalse(isinstance(response.wsgi_request.user, AnonymousUser))
             self.assertTrue(isinstance(response.wsgi_request.user, get_user_model()))
             self.assertEqual(new_user, response.wsgi_request.user)
+            self.assertEqual(new_user, response.user)
 
             # Try again, to make sure that accessing any of the above values didn't somehow clear the client.
             self.assertEqual(new_user.pk, int(self.client.session.get('_auth_user_id', None)))
             self.assertFalse(isinstance(response.wsgi_request.user, AnonymousUser))
             self.assertTrue(isinstance(response.wsgi_request.user, get_user_model()))
             self.assertEqual(new_user, response.wsgi_request.user)
+            self.assertEqual(new_user, response.user)

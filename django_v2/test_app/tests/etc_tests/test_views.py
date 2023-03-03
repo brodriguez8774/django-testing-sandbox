@@ -1,18 +1,19 @@
 """
-View tests for Django v4.1 test project app.
+View tests for Django v2.2 test project app.
 
-Uses base/built-in Django logic to execute.
+Uses ETC package logic to execute.
+Should otherwise be fairly similar to the "base_tests", as a way to
+double-check that the ETC package functions as expected.
 """
 
 # Third-Party Imports.
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import reverse
-from django.test import TestCase
+from django_expanded_test_cases import IntegrationTestCase
 
 
-class ViewTestCase(TestCase):
+class ViewTestCase(IntegrationTestCase):
     """Tests for app views."""
 
     @classmethod
@@ -20,40 +21,6 @@ class ViewTestCase(TestCase):
         """Set up testing data."""
         # Call parent logic.
         super().setUpTestData()
-
-        # Generate user models.
-        cls.test_super_user = get_user_model().objects.create(
-            username='test_superuser',
-            first_name='SuperUserFirst',
-            last_name='SuperUserLast',
-            is_superuser=True,
-            is_staff=False,
-            is_active=True,
-        )
-        cls.test_admin_user = get_user_model().objects.create(
-            username='test_admin',
-            first_name='AdminUserFirst',
-            last_name='AdminUserLast',
-            is_superuser=False,
-            is_staff=True,
-            is_active=True,
-        )
-        cls.test_inactive_user = get_user_model().objects.create(
-            username='test_inactive',
-            first_name='InactiveUserFirst',
-            last_name='InactiveUserLast',
-            is_superuser=False,
-            is_staff=False,
-            is_active=False,
-        )
-        cls.test_standard_user = get_user_model().objects.create(
-            username='test_user',
-            first_name='UserFirst',
-            last_name='UserLast',
-            is_superuser=False,
-            is_staff=False,
-            is_active=True,
-        )
 
     def debug_data(self, response):
         print('\n\n\n\n')
@@ -93,51 +60,47 @@ class ViewTestCase(TestCase):
         """Verifies that index view can be accessed as expected."""
         with self.subTest('Check views using super user'):
             # Get response object.
-            self.client.force_login(self.test_super_user)
-            response = self.client.get(reverse('test_app:index'))
+            response = self.assertGetResponse('test_app:index', user=self.test_superuser)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test App Index', page_content)
+            self.assertIn('Django LTS v2.2 - Test App Index', page_content)
 
         with self.subTest('Check views using admin user'):
             # Get response object.
-            self.client.force_login(self.test_admin_user)
-            response = self.client.get(reverse('test_app:index'))
+            response = self.assertGetResponse('test_app:index', user=self.test_admin)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test App Index', page_content)
+            self.assertIn('Django LTS v2.2 - Test App Index', page_content)
 
         with self.subTest('Check views using inactive user'):
             # Get response object.
-            self.client.force_login(self.test_inactive_user)
-            response = self.client.get(reverse('test_app:index'))
+            response = self.assertGetResponse('test_app:index', user=self.test_inactive_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test App Index', page_content)
+            self.assertIn('Django LTS v2.2 - Test App Index', page_content)
 
         with self.subTest('Check views using standard user'):
             # Get response object.
-            self.client.force_login(self.test_standard_user)
-            response = self.client.get(reverse('test_app:index'))
+            response = self.assertGetResponse('test_app:index', user=self.test_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test App Index', page_content)
+            self.assertIn('Django LTS v2.2 - Test App Index', page_content)
 
         with self.subTest('Check views using new user'):
             # Generate user model.
@@ -148,28 +111,27 @@ class ViewTestCase(TestCase):
             )
 
             # Get response object.
-            self.client.force_login(new_user)
-            response = self.client.get(reverse('test_app:index'))
+            response = self.assertGetResponse('test_app:index', user=new_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test App Index', page_content)
+            self.assertIn('Django LTS v2.2 - Test App Index', page_content)
 
     def test__assert_login_view(self):
         """Verifies that login view can be accessed as expected."""
         with self.subTest('Check views without login'):
             # Get response object.
-            response = self.client.get(reverse('test_app:view_with_login_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_login_check', auto_login=False)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -178,43 +140,40 @@ class ViewTestCase(TestCase):
 
         with self.subTest('Check views using super user'):
             # Get response object.
-            self.client.force_login(self.test_super_user)
-            response = self.client.get(reverse('test_app:view_with_login_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_login_check', user=self.test_superuser)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Login Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Login Check', page_content)
             self.assertIn('This view should require user login to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
         with self.subTest('Check views using admin user'):
             # Get response object.
-            self.client.force_login(self.test_admin_user)
-            response = self.client.get(reverse('test_app:view_with_login_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_login_check', user=self.test_admin)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Login Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Login Check', page_content)
             self.assertIn('This view should require user login to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
         with self.subTest('Check views using inactive user'):
             # Get response object.
-            self.client.force_login(self.test_inactive_user)
-            response = self.client.get(reverse('test_app:view_with_login_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_login_check', user=self.test_inactive_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -223,15 +182,14 @@ class ViewTestCase(TestCase):
 
         with self.subTest('Check views using standard user'):
             # Get response object.
-            self.client.force_login(self.test_standard_user)
-            response = self.client.get(reverse('test_app:view_with_login_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_login_check', user=self.test_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Login Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Login Check', page_content)
             self.assertIn('This view should require user login to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -244,15 +202,14 @@ class ViewTestCase(TestCase):
             )
 
             # Get response object.
-            self.client.force_login(new_user)
-            response = self.client.get(reverse('test_app:view_with_login_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_login_check', user=new_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Login Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Login Check', page_content)
             self.assertIn('This view should require user login to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -269,14 +226,14 @@ class ViewTestCase(TestCase):
 
         with self.subTest('Check views without login'):
             # Get response object.
-            response = self.client.get(reverse('test_app:view_with_permission_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_permission_check', auto_login=False)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -285,46 +242,43 @@ class ViewTestCase(TestCase):
 
         with self.subTest('Check views using super user - Without correct permission'):
             # Get response object.
-            self.client.force_login(self.test_super_user)
-            response = self.client.get(reverse('test_app:view_with_permission_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_permission_check', user=self.test_superuser)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Permission Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Permission Check', page_content)
             self.assertIn('This view should require permission of "test_permission" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
         with self.subTest('Check views using super user - With correct permission'):
             # Add permission to user.
-            self.test_super_user.user_permissions.add(test_permission)
+            self.test_superuser.user_permissions.add(test_permission)
 
             # Get response object.
-            self.client.force_login(self.test_super_user)
-            response = self.client.get(reverse('test_app:view_with_permission_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_permission_check', user=self.test_superuser)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Permission Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Permission Check', page_content)
             self.assertIn('This view should require permission of "test_permission" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
         with self.subTest('Check views using admin user - Without correct permission'):
             # Get response object.
-            self.client.force_login(self.test_admin_user)
-            response = self.client.get(reverse('test_app:view_with_permission_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_permission_check', user=self.test_admin)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertNotIn('Please login to see this page.', page_content)
             self.assertIn('Your account doesn\'t have access to this page. To proceed,', page_content)
@@ -335,32 +289,30 @@ class ViewTestCase(TestCase):
 
         with self.subTest('Check views using admin user - With correct permission'):
             # Add permission to user.
-            self.test_admin_user.user_permissions.add(test_permission)
+            self.test_admin.user_permissions.add(test_permission)
 
             # Get response object.
-            self.client.force_login(self.test_admin_user)
-            response = self.client.get(reverse('test_app:view_with_permission_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_permission_check', user=self.test_admin)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Permission Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Permission Check', page_content)
             self.assertIn('This view should require permission of "test_permission" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
         with self.subTest('Check views using inactive user - Without correct permission'):
             # Get response object.
-            self.client.force_login(self.test_inactive_user)
-            response = self.client.get(reverse('test_app:view_with_permission_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_permission_check', user=self.test_inactive_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -372,15 +324,14 @@ class ViewTestCase(TestCase):
             self.test_inactive_user.user_permissions.add(test_permission)
 
             # Get response object.
-            self.client.force_login(self.test_inactive_user)
-            response = self.client.get(reverse('test_app:view_with_permission_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_permission_check', user=self.test_inactive_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -389,15 +340,14 @@ class ViewTestCase(TestCase):
 
         with self.subTest('Check views using standard user - Without correct permission'):
             # Get response object.
-            self.client.force_login(self.test_standard_user)
-            response = self.client.get(reverse('test_app:view_with_permission_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_permission_check', user=self.test_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertNotIn('Please login to see this page.', page_content)
             self.assertIn('Your account doesn\'t have access to this page. To proceed,', page_content)
@@ -408,18 +358,17 @@ class ViewTestCase(TestCase):
 
         with self.subTest('Check views using standard user - With correct permission'):
             # Add permission to user.
-            self.test_standard_user.user_permissions.add(test_permission)
+            self.test_user.user_permissions.add(test_permission)
 
             # Get response object.
-            self.client.force_login(self.test_standard_user)
-            response = self.client.get(reverse('test_app:view_with_permission_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_permission_check', user=self.test_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Permission Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Permission Check', page_content)
             self.assertIn('This view should require permission of "test_permission" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -432,15 +381,14 @@ class ViewTestCase(TestCase):
             )
 
             # Get response object.
-            self.client.force_login(new_user)
-            response = self.client.get(reverse('test_app:view_with_permission_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_permission_check', user=new_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertNotIn('Please login to see this page.', page_content)
             self.assertIn('Your account doesn\'t have access to this page. To proceed,', page_content)
@@ -454,15 +402,14 @@ class ViewTestCase(TestCase):
             new_user.user_permissions.add(test_permission)
 
             # Get response object.
-            self.client.force_login(new_user)
-            response = self.client.get(reverse('test_app:view_with_permission_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_permission_check', user=new_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Permission Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Permission Check', page_content)
             self.assertIn('This view should require permission of "test_permission" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -474,14 +421,14 @@ class ViewTestCase(TestCase):
 
         with self.subTest('Check views without login'):
             # Get response object.
-            response = self.client.get(reverse('test_app:view_with_group_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_group_check', auto_login=False)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -490,46 +437,43 @@ class ViewTestCase(TestCase):
 
         with self.subTest('Check views using super user - Without correct group'):
             # Get response object.
-            self.client.force_login(self.test_super_user)
-            response = self.client.get(reverse('test_app:view_with_group_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_group_check', user=self.test_superuser)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Group Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Group Check', page_content)
             self.assertIn('This view should require group of "test_group" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
         with self.subTest('Check views using super user - With correct group'):
             # Add group to user.
-            self.test_super_user.groups.add(test_group)
+            self.test_superuser.groups.add(test_group)
 
             # Get response object.
-            self.client.force_login(self.test_super_user)
-            response = self.client.get(reverse('test_app:view_with_group_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_group_check', user=self.test_superuser)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Group Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Group Check', page_content)
             self.assertIn('This view should require group of "test_group" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
         with self.subTest('Check views using admin user - Without correct group'):
             # Get response object.
-            self.client.force_login(self.test_admin_user)
-            response = self.client.get(reverse('test_app:view_with_group_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_group_check', user=self.test_admin)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertNotIn('Please login to see this page.', page_content)
             self.assertNotIn('Your account doesn\'t have access to this page. To proceed,', page_content)
@@ -540,32 +484,30 @@ class ViewTestCase(TestCase):
 
         with self.subTest('Check views using admin user - With correct group'):
             # Add group to user.
-            self.test_admin_user.groups.add(test_group)
+            self.test_admin.groups.add(test_group)
 
             # Get response object.
-            self.client.force_login(self.test_admin_user)
-            response = self.client.get(reverse('test_app:view_with_group_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_group_check', user=self.test_admin)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Group Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Group Check', page_content)
             self.assertIn('This view should require group of "test_group" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
         with self.subTest('Check views using inactive user - Without correct group'):
             # Get response object.
-            self.client.force_login(self.test_inactive_user)
-            response = self.client.get(reverse('test_app:view_with_group_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_group_check', user=self.test_inactive_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -577,15 +519,14 @@ class ViewTestCase(TestCase):
             self.test_inactive_user.groups.add(test_group)
 
             # Get response object.
-            self.client.force_login(self.test_inactive_user)
-            response = self.client.get(reverse('test_app:view_with_group_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_group_check', user=self.test_inactive_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -594,15 +535,14 @@ class ViewTestCase(TestCase):
 
         with self.subTest('Check views using standard user - Without correct group'):
             # Get response object.
-            self.client.force_login(self.test_standard_user)
-            response = self.client.get(reverse('test_app:view_with_group_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_group_check', user=self.test_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertNotIn('Please login to see this page.', page_content)
             self.assertNotIn('Your account doesn\'t have access to this page. To proceed,', page_content)
@@ -613,18 +553,17 @@ class ViewTestCase(TestCase):
 
         with self.subTest('Check views using standard user - With correct group'):
             # Add group to user.
-            self.test_standard_user.groups.add(test_group)
+            self.test_user.groups.add(test_group)
 
             # Get response object.
-            self.client.force_login(self.test_standard_user)
-            response = self.client.get(reverse('test_app:view_with_group_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_group_check', user=self.test_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Group Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Group Check', page_content)
             self.assertIn('This view should require group of "test_group" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -637,15 +576,14 @@ class ViewTestCase(TestCase):
             )
 
             # Get response object.
-            self.client.force_login(new_user)
-            response = self.client.get(reverse('test_app:view_with_group_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_group_check', user=new_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django LTS v2.2 - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertNotIn('Please login to see this page.', page_content)
             self.assertNotIn('Your account doesn\'t have access to this page. To proceed,', page_content)
@@ -659,14 +597,13 @@ class ViewTestCase(TestCase):
             new_user.groups.add(test_group)
 
             # Get response object.
-            self.client.force_login(new_user)
-            response = self.client.get(reverse('test_app:view_with_group_check'), follow=True)
+            response = self.assertGetResponse('test_app:view_with_group_check', user=new_user)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Group Check', page_content)
+            self.assertIn('Django LTS v2.2 - Test Group Check', page_content)
             self.assertIn('This view should require group of "test_group" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)

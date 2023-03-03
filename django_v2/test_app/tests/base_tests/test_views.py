@@ -1,5 +1,7 @@
 """
 View tests for Django v2.2 test project app.
+
+Uses base/built-in Django logic to execute.
 """
 
 # Third-Party Imports.
