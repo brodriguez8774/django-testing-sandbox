@@ -43,12 +43,16 @@ class ModelTestCase(IntegrationTestCase):
         """Prints out all context values to terminal."""
         print('{0} {1} {0}'.format('=' * 10, 'response.context'))
 
-        for key in response.context.keys():
-            context_value = str(response.context.get(key))
-            # Truncate display if very long.
-            if len(context_value) > 80:
-                context_value = '"{0}"..."{1}"'.format(context_value[:40], context_value[-40:])
-            print('    * {0}: {1}'.format(key, context_value))
+        try:
+            if response.context is not None:
+                for key in response.context.keys():
+                    context_value = str(response.context.get(key))
+                    # Truncate display if very long.
+                    if len(context_value) > 80:
+                        context_value = '"{0}"..."{1}"'.format(context_value[:40], context_value[-40:])
+                    print('    * {0}: {1}'.format(key, context_value))
+        except AttributeError:
+            pass
 
     def display_session(self):
         """Prints out all session values to terminal."""
@@ -162,14 +166,16 @@ class ModelTestCase(IntegrationTestCase):
             self.assertTrue(isinstance(uwsgi_user, AnonymousUser))
             self.assertFalse(isinstance(uwsgi_user, get_user_model()))
             self.assertNotEqual(self.test_inactive_user, uwsgi_user)
-            self.assertIsNone(response.user)
+            self.assertTrue(isinstance(response.user, AnonymousUser))
+            self.assertFalse(isinstance(response.user, get_user_model()))
 
             # Try again, to make sure that accessing any of the above values didn't somehow clear the client.
             self.assertEqual(self.test_inactive_user.pk, int(self.client.session.get('_auth_user_id', None)))
             self.assertTrue(isinstance(uwsgi_user, AnonymousUser))
             self.assertFalse(isinstance(uwsgi_user, get_user_model()))
             self.assertNotEqual(self.test_inactive_user, uwsgi_user)
-            self.assertIsNone(response.user)
+            self.assertTrue(isinstance(response.user, AnonymousUser))
+            self.assertFalse(isinstance(response.user, get_user_model()))
 
         with self.subTest('Check login using standard user'):
             # Get response object.

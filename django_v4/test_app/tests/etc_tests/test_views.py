@@ -42,13 +42,16 @@ class ViewTestCase(IntegrationTestCase):
         """Prints out all context values to terminal."""
         print('{0} {1} {0}'.format('=' * 10, 'response.context'))
 
-        if response.context is not None:
-            for key in response.context.keys():
-                context_value = str(response.context.get(key))
-                # Truncate display if very long.
-                if len(context_value) > 80:
-                    context_value = '"{0}"..."{1}"'.format(context_value[:40], context_value[-40:])
-                print('    * {0}: {1}'.format(key, context_value))
+        try:
+            if response.context is not None:
+                for key in response.context.keys():
+                    context_value = str(response.context.get(key))
+                    # Truncate display if very long.
+                    if len(context_value) > 80:
+                        context_value = '"{0}"..."{1}"'.format(context_value[:40], context_value[-40:])
+                    print('    * {0}: {1}'.format(key, context_value))
+        except AttributeError:
+            pass
 
     def display_session(self):
         """Prints out all session values to terminal."""
@@ -227,7 +230,7 @@ class ViewTestCase(IntegrationTestCase):
 
         with self.subTest('Check views without login'):
             # Get response object.
-            response = self.assertGetResponse('test_app:view_with_permission_check', login=False)
+            response = self.assertGetResponse('test_app:view_with_permission_check', auto_login=False)
 
             # Display debug data to console on test failure.
             self.debug_data(response)
