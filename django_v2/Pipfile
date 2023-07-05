@@ -12,7 +12,7 @@ verify_ssl = true
  # Python version declaration.
  ##
 [requires]
-python_version = "3.9"
+python_version = "3.11"
 
 
 ###
@@ -28,7 +28,9 @@ django-localflavor = "*"        # Easy implementation of localization info, such
  ##
 [dev-packages]
 # General dev dependencies.
+# django-adminlte2-pdq = "*"      # Adds framework for easily styling site like adminlte2.
 django-debug-toolbar = "*"      # Displays helpful debug-toolbar on side of browser window.
+# django-dump-die = "*"           # Dump-and-die debugging tool.
 
 # Syntax-checking dependencies.
 autopep8 = "*"                  # Auto-formats files for pep8 recommendations. See `setup.cfg` for our exceptions.
@@ -39,6 +41,7 @@ pylint-plugin-utils = "*"       # Additional pylint functionality for things lik
 
 # Testing/Pytest dependencies.
 coverage = "*"                  # Outputs testing coverage data.
+django-expanded-test-cases = "*"    # Utilities for easier testing.
 freezegun = "*"                 # Allows "freezing" tests to specific datetimes, for consistent checking and output.
 pytest = "*"                    # Base Pytest package. Current preferred testing method.
 pytest-django = "*"             # Additional Pytest logic for Django support.
