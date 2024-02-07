@@ -16,6 +16,10 @@ urlpatterns = [
     path('view_with_permission_check/', views.view_with_permission_check, name='view_with_permission_check'),
     path('view_with_group_check/', views.view_with_group_check, name='view_with_group_check'),
 
+    # Test API views.
+    path('api/parse/', views.api_parse, name='api_parse'),
+    path('api/display/', views.api_display, name='api_display'),
+
     # App root.
     path('', views.index, name='index')
 ]
