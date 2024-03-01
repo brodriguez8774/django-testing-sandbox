@@ -19,6 +19,7 @@ urlpatterns = [
     # Test API views.
     path('api/parse/', views.api_parse, name='api_parse'),
     path('api/display/', views.api_display, name='api_display'),
+    path('api/send/', views.api_send, name='api_send'),
 
     # App root.
     path('', views.index, name='index')

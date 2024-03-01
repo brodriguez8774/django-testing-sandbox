@@ -1,0 +1,176 @@
+{% extends "test_app/base.html" %}
+
+{% block page_header %}
+  Django LTS v4.2 - API Send
+{% endblock page_header %}
+
+
+{% block page_subheader %}
+  API Send Page
+{% endblock page_subheader %}
+
+
+{% block stylesheets %}
+<style>
+  form {
+    padding: 10px;
+    border: 1px solid grey;
+  }
+
+  form div {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  textarea {
+    width: 100%;
+  }
+
+  pre {
+    width: 100%;
+    margin: 5px;
+    padding: 5px;
+    background-color: LightSteelBlue;
+  }
+
+  .error {
+    color: red;
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .label p {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .label {
+    width: 10%;
+    padding: 0 10px 0 10px;
+    text-align: right;
+  }
+
+  .help-text {
+    font-size: 70%;
+    font-style: italic;
+    text-align: center;
+  }
+
+  .field {
+    width: 80%;
+    padding: 0 10px 0 10px;
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <p>Use this to generate and send test API requests to other projects.</p>
+
+  <form method="POST">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="error">
+        <p>Non Field Errors:</p>
+        {{ form.non_field_errors }}
+      </div>
+      <hr>
+    {% endif %}
+
+    {% for field in form %}
+
+      <div>
+        {% if field.errors %}
+          <p class="error"> Field Error:
+          {% for error in field.errors %}
+            {{ error }}
+          {% endfor %}
+          </p>
+        {% endif %}
+
+        <div class="field-group">
+
+          <div class="label">
+            <p>{{ field.label }}:</p>
+            {% if field.help_text %}
+              <p class="help-text">{{ field.help_text|safe }}</p>
+            {% endif %}
+          </div>
+          <div class="field">
+            {{ field }}
+          </div>
+        </div>
+
+      </div>
+
+    {% endfor %}
+
+    <input type="submit" value="Submit">
+  </form>
+
+  <div class="example">
+    <h2>Example Send Values:</h2>
+
+    <div class="field-group">
+      <div class="label">
+        <p>
+          Url:
+        </p>
+      </div>
+      <pre>http://127.0.0.1:8000/test_app/api/parse/</pre>
+    </div>
+    <div class="field-group">
+      <div class="label">
+        <p>
+          Get Params:
+        </p>
+      </div>
+      <pre>test-param-1=Abc&test-param-2=123</pre>
+    </div>
+    <div class="field-group">
+      <div class="label">
+        <p>
+          Header Token:
+        </p>
+      </div>
+      <pre>MyExampleHeaderAuthToken-112233445566778899ABABCDCD</pre>
+    </div>
+    <div class="field-group">
+      <div class="label">
+        <p>
+          Payload:
+        </p>
+      </div>
+      <pre>{
+  "test": true,
+  "Aaa": "Bbb",
+  "MyNumber": 5
+}</pre>
+    </div>
+  </div>
+
+  <hr>
+
+  <p>Above values will send:</p>
+  <pre>url: http://127.0.0.1:8000/test_app/api/parse/?test-param-1=Abc&test-param-2=123
+
+header: {
+  "Accept": "application/json",
+  "token": "MyExampleHeaderAuthToken-112233445566778899ABABCDCD"
+}
+
+data: {
+  "test": true,
+  "Aaa": "Bbb",
+  "MyNumber": 5
+}</pre>
+
+{% endblock content %}

@@ -29,7 +29,7 @@
       <p>API Views:</p>
       <ul>
         <li>
-          <p><a href="{% url 'test_app:api_parse' %}">API Parse - Send API requests here to parse them.</a></p>
+          <p><a href="{% url 'test_app:api_parse' %}">API Parse - Receive API requests here to parse them.</a></p>
         </li>
         <li>
           <p><a href="{% url 'test_app:api_display' %}">API Display - View parsed API requests here.</a></p>
@@ -38,6 +38,9 @@
             <br>
             All parsed API data is purged after page access.
           </p>
+        </li>
+        <li>
+          <p><a href="{% url 'test_app:api_send' %}">API Send - Generate and send API requests here.</a></p>
         </li>
       </ul>
     </li>
