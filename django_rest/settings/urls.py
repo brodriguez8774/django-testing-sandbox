@@ -13,8 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+# System Imports.
+
+# Third-Party Imports.
 from django.contrib import admin
 from django.urls import include, path
+
+# Internal Imports.
+from test_app.routes import router
+
 
 urlpatterns = [
     # Django Admin views.
@@ -25,6 +33,10 @@ urlpatterns = [
 
     # Basic/minimalistic Django application.
     path('test_app/', include('test_app.urls')),
+
+    # Django REST views.
+    path('rest/', include(router.urls)),
+    path('rest/api-auth/', include('rest_framework.urls')),
 
     # Package testing views.
 

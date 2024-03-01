@@ -8,15 +8,22 @@ import html
 import requests
 
 # Third-Party Imports.
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import Group
 from django.http import HttpResponse, JsonResponse, QueryDict
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import redirect, render, reverse
+from rest_framework import permissions, viewsets
 
 # Internal Imports.
 from test_app.forms import ApiSendForm
 from test_app.models import ApiRequestJson
+from test_app.serializers import (
+    GroupSerializer,
+    UserSerializer,
+)
 
 
 # region Index/Root Views
@@ -254,3 +261,25 @@ def api_send(request):
     })
 
 # endregion API Views
+
+
+# region REST API Views
+
+class UserModelViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = get_user_model().objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class GroupModelViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+# endregion REST API Views

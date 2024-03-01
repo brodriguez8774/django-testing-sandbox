@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     # DjangoETC Package.
     'django_expanded_test_cases',
 
+    # Django REST Package.
+    'rest_framework',
+
     # Built-in Django apps.
     'django.contrib.admin',
     'django.contrib.auth',
@@ -140,3 +143,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Django REST settings.
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions, or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+
+    # API pagination settings.
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+}

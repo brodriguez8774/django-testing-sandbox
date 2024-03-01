@@ -25,6 +25,12 @@ django-adminlte2-pdq = "*"      # Adds framework for easily styling site like ad
 django-localflavor = "*"        # Easy implementation of localization info, such as addresses.
 requests = "*"                  # Simple HTTP library. Useful for things like initiating API requests.
 
+# Django REST dependencies.
+djangorestframework = "*"       # Core Django REST package.
+markdown = "*"                  # Markdown support for browsable API.
+django-filter = "*"             # API filtering support.
+
+
 ###
  # Development and testing packages, installed via `pipenv sync --dev`.
  ##
