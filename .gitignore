@@ -144,3 +144,6 @@ node_modules/
 # This is one of the few instances where we don't expect to ever use
 # this in production. So we can safely ignore Pipfile.lock files.
 */Pipfile.lock
+
+# Ignore test image, if present.
+*/media/uploads/test_image.*
