@@ -1,0 +1,50 @@
+{% extends "test_app/base.html" %}
+
+
+{% block page_header %}
+  Django Testing Sandbox - LTS v4.2
+{% endblock page_header %}
+
+
+{% block content %}
+  <hr>
+
+  <h3>In-Project Views</h3>
+  <ul>
+    <li>
+      <p><a href="{% url 'admin:index' %}">Admin Views</a></p>
+    </li>
+    <li>
+      <p><a href="{% url 'test_app:index' %}">Test App Views</a></p>
+    </li>
+  </ul>
+
+  <hr>
+
+  <h3>Package Debug Views</h3>
+
+  <h4>Django AdminLTE2 PDQ (PrettyDarnQuick)</h4>
+  <ul>
+    <li>
+      <p><a href="{% url 'adminlte2_pdq:home' %}">AdminLTE2 PDQ Debug Views</a></p>
+    </li>
+  </ul>
+
+  <h4>Django DD (DumpDie)</h4>
+  <ul>
+    <li>
+      <p><a href="{% url 'django_dump_die:index' %}">Django DD Debug Views</a></p>
+    </li>
+    <li>
+      <p><a href="{% url 'django_dump_die_tests:index' %}">Django DD Test Views</a></p>
+    </li>
+  </ul>
+
+  <h4>Django ETC (ExpandedTestCases)</h4>
+  <ul>
+    <li>
+      <p><a href="{% url 'django_expanded_test_cases:index' %}">Django ETC Test Views</a></p>
+    </li>
+  </ul>
+
+{% endblock content %}
