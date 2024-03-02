@@ -5,6 +5,7 @@ Views for Django v4.2 test project app.
 # System Imports.
 import json
 import html
+import re
 import requests
 
 # Third-Party Imports.
@@ -194,6 +195,9 @@ def api_send(request):
     print('\n')
     print('api_send():')
 
+    response_success = {}
+    response_error = {}
+
     # Get initial data.
     form_initial = [{
         'is_str': True,
@@ -239,18 +243,107 @@ def api_send(request):
                 data = json.dumps({'success': True})
 
             # Generate API send object.
-            response = requests.post(
-                url,
-                headers=headers,
-                data=data,
-                timeout=5,
-            )
+            is_error = False
+            try:
+                response = requests.post(
+                    url,
+                    headers=headers,
+                    data=data,
+                    timeout=5,
+                )
+            except Exception as err:
+                is_error = True
+                response_error['query_sent'] = False if not err.response else True
+                response_error['message'] = str(err.message) if hasattr(err, 'message') else str(err)
+                if 'Max retries exceeded with url' in response_error['message']:
+                    response_error['help_text'] = (
+                        'This error is often the result of a typo in the URL, or the desired endpoint being down. '
+                        'Are you sure you entered the destination URL correctly?'
+                    )
+
+            if not is_error:
+                # Handle for success state.
+
+                response_success['status'] = response.status_code
+                if response_success['status'] >= 400:
+                    # Define help_text key now to preserve location in display ordering.
+
+                    # Provide help text for some common error statuses.
+                    if response_success['status'] == 400:
+                        # 400: Bad Request
+                        response_success['help_text'] = (
+                            '400: Bad Request - This error is often the result of a bad or malformed request, such '
+                            'as incorrect or unexpected syntax. Double check that the sent request data is correct.'
+                        )
+                    elif response_success['status'] == 401:
+                        # 401: Unauthorized
+                        response_success['help_text'] = (
+                            '401: Unauthorized - This error is often the result of invalid or missing authentication '
+                            'credentials. Are you sure the authentication tokens are correctly provided?'
+                        )
+                    elif response_success['status'] == 403:
+                        # 403: Forbidden
+                        response_success['help_text'] = (
+                            '403: Forbidden - This error is often the result of invalid or missing authentication '
+                            'credentials. Are you sure the authentication tokens are correctly provided?'
+                        )
+                    elif response_success['status'] == 404:
+                        # 404: Not Found
+                        response_success['help_text'] = (
+                            '404: Not Found - This error is often the result of the requested url not existing on the '
+                            'server. Are you sure you entered the destination URL correctly?'
+                        )
+                    elif response_success['status'] == 500:
+                        # 500: Server Error
+                        response_success['help_text'] = (
+                            '500: Server Error - This error is often the result of your request being received, but '
+                            'the server broke when trying to process the request. If this is a server you have '
+                            'access to, then double check the server logs for more details.'
+                        )
+
+                if response.headers:
+                    response_success['headers'] = response.headers
+                if response.headers['content-Type'] and response.headers['Content-Type'] == 'application/json':
+                    response_success['content'] = response.json()
+                else:
+                    content = html.unescape(response.content.decode('UTF-8'))
+
+                    # NOTE: Below copied from Django ExpandedTestCase package.
+                    # Replace html linebreak with actual newline character.
+                    content = re.sub('<br>|</br>|<br/>|<br />', '\n', content)
+
+                    # Replace non-breaking space with actual space character.
+                    content = re.sub('(&nbsp;)+', ' ', content)
+
+                    # Replace any carriage return characters with newline character.
+                    content = re.sub(r'\r+', '\n', content)
+
+                    # Replace any whitespace trapped between newline characters.
+                    # This is empty/dead space, likely generated by how Django handles templating.
+                    content = re.sub(r'\n\s+\n', '\n', content)
+
+                    # Replace any repeating linebreaks.
+                    content = re.sub(r'\n\n+', '\n', content)
+
+                    # # Reduce any repeating whitespace instances.
+                    # content = re.sub(r' ( )+', ' ', content)
+
+                    # Strip final calculated string of extra outer whitespace.
+                    content = str(content).strip()
+                    response_success['content'] = content
+
+                # Handle if was response was received, but it gave error level status.
+                if response_success['status'] >= 400:
+                    response_error = response_success
+                    response_success = {}
 
     print('Rendering response...')
     print('')
 
     return render(request, 'test_app/api_send.html', {
         'form': form,
+        'response_success': response_success,
+        'response_error': response_error,
     })
 
 # endregion API Views
