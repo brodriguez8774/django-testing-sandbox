@@ -1,7 +1,7 @@
 {% extends "test_app/base.html" %}
 
 {% block page_header %}
-  Django LTS v4.2 - API Send
+  Django - API Send
 {% endblock page_header %}
 
 
@@ -103,6 +103,10 @@
     border: 1px solid grey;
   }
 
+  .result-box.sent-data pre {
+    background-color: LightBlue;
+  }
+
   .italics {
     font-style: italic;
     color: #575757;
@@ -129,7 +133,7 @@
 
   <form method="POST">
     <h2>API Send Form</h2>
-    <p>Use the below form to send a JSON API ping to the desired url.</p>
+    <p class="italics">Use the below form to send a JSON API ping to the desired url.</p>
 
     {% csrf_token %}
 
@@ -175,6 +179,10 @@
   <div class="result-box">
     <h2>Parsed Return-Response</h2>
 
+    {% if response_error or response_success %}
+      <p class="italics">This is the data that was returned after the previous API send.</p>
+    {% endif %}
+
     {% if response_success %}
       <h3 class="success-return">Success Sending API Ping</h3>
       {% for key, value in response_success.items %}
@@ -203,6 +211,21 @@
       <p class="italics">No return value yet. Submit the API form and the resulting return response will display here.</p>
     {% endif %}
   </div>
+
+  {% if sent_data %}
+    <div class="result-box sent-data">
+      <h2>Sent Data</h2>
+      <p class="italics">This is what was sent out from this form, on the previous API call.</p>
+      {% for key, value in sent_data.items %}
+        <div class="field-group">
+          <div class="label">
+            <p>{{ key }}</p>
+          </div>
+          <pre class="allow-break">{{ value }}</pre>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
 
   <div class="example">
     <h2>Example Send Values:</h2>

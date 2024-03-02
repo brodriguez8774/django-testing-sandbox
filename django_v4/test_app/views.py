@@ -197,6 +197,7 @@ def api_send(request):
 
     response_success = {}
     response_error = {}
+    sent_data = {}
 
     # Get initial data.
     form_initial = [{
@@ -211,6 +212,7 @@ def api_send(request):
     if request.POST:
         # Is POST. Process data.
         print('Is POST submission.')
+        has_error = False
 
         data = request.POST
         form = ApiSendForm(data=data)
@@ -219,7 +221,6 @@ def api_send(request):
             # Handle for form submission.
             print('Submitted form data:')
             print('{0}'.format(form.cleaned_data))
-            has_error = False
 
             url = str(form.cleaned_data['url']).strip()
             get_params = str(form.cleaned_data.get('get_params', '')).strip()
@@ -227,9 +228,9 @@ def api_send(request):
             payload = str(form.cleaned_data.get('payload', '{}')).strip()
             if len(payload) > 0:
                 try:
-                    has_error = True
                     payload = json.loads(payload)
                 except json.decoder.JSONDecodeError:
+                    has_error = True
                     payload = {}
                     form.add_error(
                         'payload',
@@ -280,6 +281,13 @@ def api_send(request):
             if not has_error:
                 # Handle for success state.
 
+                # Display sent input data to user.
+                # That way they can change the form for a subsequent request and still see what was sent last time.
+                sent_data['url'] = url
+                sent_data['headers'] = headers
+                sent_data['content'] = data
+
+                # Parse returned response status code.
                 response_success['status'] = response.status_code
                 if response_success['status'] >= 400:
                     # Define help_text key now to preserve location in display ordering.
@@ -317,8 +325,11 @@ def api_send(request):
                             'access to, then double check the server logs for more details.'
                         )
 
+                # Parse returned response header data.
                 if response.headers:
                     response_success['headers'] = response.headers
+
+                # Parse returned response content.
                 if response.headers['content-Type'] and response.headers['Content-Type'] == 'application/json':
                     response_success['content'] = response.json()
                 else:
@@ -358,6 +369,7 @@ def api_send(request):
 
     return render(request, 'test_app/api_send.html', {
         'form': form,
+        'sent_data': sent_data,
         'response_success': response_success,
         'response_error': response_error,
     })
