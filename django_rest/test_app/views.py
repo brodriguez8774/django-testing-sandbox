@@ -218,6 +218,7 @@ def api_send(request):
     if request.POST:
         # Is POST. Process data.
         print('Is POST submission.')
+        has_error = False
 
         data = request.POST
         form = ApiSendForm(data=data)
@@ -230,7 +231,23 @@ def api_send(request):
             url = str(form.cleaned_data['url']).strip()
             get_params = str(form.cleaned_data.get('get_params', '')).strip()
             header_token = str(form.cleaned_data.get('header_token', '')).strip()
-            payload = json.loads(str(form.cleaned_data.get('payload', {})).strip())
+            payload = str(form.cleaned_data.get('payload', '{}')).strip()
+            if len(payload) > 0:
+                try:
+                    payload = json.loads(payload)
+                except json.decoder.JSONDecodeError:
+                    has_error = True
+                    payload = {}
+                    form.add_error(
+                        'payload',
+                        'Unrecognized/invalid JSON syntax. Please double check syntax and try again.',
+                    )
+            else:
+                has_error = True
+                form.add_error(
+                    'payload',
+                    'Please provide JSON data to send. If API query is meant to be empty, use {}.',
+                )
 
             # Determine url.
             if get_params and len(get_params) > 0:
@@ -250,7 +267,6 @@ def api_send(request):
                 data = json.dumps({'success': True})
 
             # Generate API send object.
-            is_error = False
             try:
                 response = requests.post(
                     url,
@@ -259,7 +275,7 @@ def api_send(request):
                     timeout=5,
                 )
             except Exception as err:
-                is_error = True
+                has_error = True
                 response_error['query_sent'] = False if not err.response else True
                 response_error['message'] = str(err.message) if hasattr(err, 'message') else str(err)
                 if 'Max retries exceeded with url' in response_error['message']:
@@ -268,7 +284,7 @@ def api_send(request):
                         'Are you sure you entered the destination URL correctly?'
                     )
 
-            if not is_error:
+            if not has_error:
                 # Handle for success state.
 
                 response_success['status'] = response.status_code
