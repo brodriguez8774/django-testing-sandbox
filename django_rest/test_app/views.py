@@ -72,7 +72,7 @@ def view_with_group_check(request):
 # region API Views
 
 @csrf_exempt
-@require_http_methods(["GET", "POST"])
+@require_http_methods(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
 def api_parse(request):
     """Takes in JSON ping, and saves incoming value to web cookies.
 
@@ -205,12 +205,6 @@ def api_send(request):
     response_success = {}
     response_error = {}
     sent_data = {}
-
-    # Get initial data.
-    form_initial = [{
-        'is_str': True,
-        'value': 'This is a test entry.'
-    }]
 
     # Initialize formset.
     form = ApiSendForm()
@@ -379,6 +373,21 @@ def api_send(request):
                         response_success['help_text'] = (
                             '404: Not Found - This error is often the result of the requested url not existing on the '
                             'server. Are you sure you entered the destination URL correctly?'
+                        )
+                    elif response_success['status'] == 405:
+                        # 405: Method Not Allowed
+                        response_success['help_text'] = (
+                            '405: Method Not Allowed - This error is often the result of the destination understanding '
+                            'the sent response type (GET/POST/PUT/PATCH/DELETE), but not supporting said type. '
+                            'If this is a server you have access to, then double check that the endpoint is configured '
+                            'correctly.'
+                        )
+                    elif response_success['status'] == 415:
+                        # 415: Unsupported Media Type
+                        response_success['help_text'] = (
+                            '415: Unsupported Media Type - This error is often the result of the destination '
+                            'being unable to parse the provided content. Are you sure the payload was entered '
+                            'correctly?'
                         )
                     elif response_success['status'] == 500:
                         # 500: Server Error
