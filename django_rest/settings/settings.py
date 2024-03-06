@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     # Django REST Package.
     'rest_framework',
+    'rest_framework.authtoken',
 
     # Built-in Django apps.
     'django.contrib.admin',

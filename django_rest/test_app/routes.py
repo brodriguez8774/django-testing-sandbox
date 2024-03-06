@@ -9,12 +9,11 @@ Urls for Django REST test project app.
 from rest_framework import routers
 
 # Internal Imports.
-
-
 from test_app import views
+
+
 router = routers.DefaultRouter()
 
-# Hyperlink API Views.
 
 # Model API Views.
 router.register(r'users', views.UserModelViewSet)

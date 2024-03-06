@@ -4,6 +4,7 @@ Urls for Django REST test project app.
 
 # Third-Party Imports.
 from django.urls import path
+from rest_framework.authtoken import views as rest_views
 
 # Internal Imports.
 from . import views
@@ -20,6 +21,9 @@ urlpatterns = [
     path('api/parse/', views.api_parse, name='api_parse'),
     path('api/display/', views.api_display, name='api_display'),
     path('api/send/', views.api_send, name='api_send'),
+
+    # Test REST API views.
+    path('api/api-token-auth', rest_views.obtain_auth_token, name='api_token_auth'),
 
     # App root.
     path('', views.index, name='index')
