@@ -281,7 +281,7 @@ def api_send(request):
             # Generate API send object.
             try:
                 # Generate based on clicked send button.
-                if send_type == 'GET':
+                if not has_error and send_type == 'GET':
                     response = requests.get(
                         url,
                         headers=headers,
@@ -289,7 +289,7 @@ def api_send(request):
                         timeout=5,
                     )
 
-                elif send_type == 'POST':
+                elif not has_error and send_type == 'POST':
                     response = requests.post(
                         url,
                         headers=headers,
@@ -297,7 +297,7 @@ def api_send(request):
                         timeout=5,
                     )
 
-                elif send_type == 'PUT':
+                elif not has_error and send_type == 'PUT':
                     response = requests.put(
                         url,
                         headers=headers,
@@ -305,7 +305,7 @@ def api_send(request):
                         timeout=5,
                     )
 
-                elif send_type == 'PATCH':
+                elif not has_error and send_type == 'PATCH':
                     response = requests.patch(
                         url,
                         headers=headers,
@@ -313,7 +313,7 @@ def api_send(request):
                         timeout=5,
                     )
 
-                elif send_type == 'DELETE':
+                elif not has_error and send_type == 'DELETE':
                     response = requests.delete(
                         url,
                         headers=headers,
@@ -321,7 +321,7 @@ def api_send(request):
                         timeout=5,
                     )
 
-                else:
+                elif not has_error:
                     # Unknown send type. Somehow. Raise error.
                     form.add_error(None, 'Invalid send_type. Was "{0}".'.format(send_type))
             except Exception as err:
