@@ -214,13 +214,30 @@ def api_send(request):
         print('Is POST submission.')
         has_error = False
 
-        data = request.POST
-        form = ApiSendForm(data=data)
+        post_data = request.POST
+        form = ApiSendForm(data=post_data)
 
         if form.is_valid():
             # Handle for form submission.
             print('Submitted form data:')
             print('{0}'.format(form.cleaned_data))
+
+            send_type = ''
+            if 'submit_get' in post_data:
+                send_type = 'GET'
+                # data.pop('submit_get')
+            if 'submit_post' in post_data:
+                send_type = 'POST'
+                # data.pop('submit_post')
+            if 'submit_put' in post_data:
+                send_type = 'PUT'
+                # data.pop('submit_put')
+            if 'submit_patch' in post_data:
+                send_type = 'PATCH'
+                # data.pop('submit_patch')
+            if 'submit_delete' in post_data:
+                send_type = 'DELETE'
+                # data.pop('submit_delete')
 
             url = str(form.cleaned_data['url']).strip()
             get_params = str(form.cleaned_data.get('get_params', '')).strip()
@@ -262,12 +279,50 @@ def api_send(request):
 
             # Generate API send object.
             try:
-                response = requests.post(
-                    url,
-                    headers=headers,
-                    data=data,
-                    timeout=5,
-                )
+                # Generate based on clicked send button.
+                if send_type == 'GET':
+                    response = requests.get(
+                        url,
+                        headers=headers,
+                        data=data,
+                        timeout=5,
+                    )
+
+                elif send_type == 'POST':
+                    response = requests.post(
+                        url,
+                        headers=headers,
+                        data=data,
+                        timeout=5,
+                    )
+
+                elif send_type == 'PUT':
+                    response = requests.put(
+                        url,
+                        headers=headers,
+                        data=data,
+                        timeout=5,
+                    )
+
+                elif send_type == 'PATCH':
+                    response = requests.patch(
+                        url,
+                        headers=headers,
+                        data=data,
+                        timeout=5,
+                    )
+
+                elif send_type == 'DELETE':
+                    response = requests.delete(
+                        url,
+                        headers=headers,
+                        data=data,
+                        timeout=5,
+                    )
+
+                else:
+                    # Unknown send type. Somehow. Raise error.
+                    form.add_error(None, 'Invalid send_type. Was "{0}".'.format(send_type))
             except Exception as err:
                 has_error = True
                 response_error['query_sent'] = False if not err.response else True
@@ -283,6 +338,7 @@ def api_send(request):
 
                 # Display sent input data to user.
                 # That way they can change the form for a subsequent request and still see what was sent last time.
+                sent_data['send_type'] = send_type
                 sent_data['url'] = url
                 sent_data['headers'] = headers
                 sent_data['content'] = data

@@ -1,5 +1,6 @@
 {% extends "test_app/base.html" %}
 
+
 {% block page_header %}
   Django - API Send
 {% endblock page_header %}
@@ -12,6 +13,13 @@
 
 {% block stylesheets %}
 <style>
+  form h2, form h3, form h4, form h5, form h6,
+  .result-box h2, .result-box h3, .result-box h4, .result-box h5, .result-box h6,
+  .example h2, .example h3, .example h4, .example h5, .example h6 {
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+
   form {
     margin: 10px;
     padding: 15px;
@@ -81,6 +89,16 @@
     padding: 0 10px 0 10px;
   }
 
+  .submit-buttons {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .submit-buttons input {
+    margin: 5px;
+    padding: 5px;
+  }
+
   .example {
     margin-top: 25px;
     margin-right: 10px;
@@ -108,6 +126,10 @@
   }
 
   .italics {
+    margin-top: 5px;
+    margin-bottom: 8px;
+
+    font-size: 90%;
     font-style: italic;
     color: #575757;
   }
@@ -127,6 +149,7 @@
   }
 </style>
 {% endblock stylesheets %}
+
 
 {% block content %}
   <p>Use this to generate and send test API requests to other projects.</p>
@@ -173,7 +196,35 @@
 
     {% endfor %}
 
-    <input type="submit" value="Submit">
+    <div class="submit-buttons">
+      <input
+        type="submit"
+        name="submit_get"
+        value="Submit as GET"
+        title="Generally used to retrieve data from the server."
+      >
+      <input
+        type="submit"
+        name="submit_post"
+        value="Submit as POST"
+        title="Generally used to send data to the server, and create a new resource."
+      >
+      <input
+        type="submit"
+        name="submit_put"
+        value="Submit as PUT"
+        title="Generally used to send data to the server, and update an existing resource by full replacement."
+      >
+      <input type="submit" name="submit_put" value="Submit as PATCH"
+        title="Generally used to send data to the server, and update an existing resource by partial replacement."
+      >
+      <input
+        type="submit"
+        name="submit_delete"
+        value="Submit as DELETE"
+        title="Generally used to send data to the server, and delete an existing resource."
+      >
+    </div>
   </form>
 
   <div class="result-box">
