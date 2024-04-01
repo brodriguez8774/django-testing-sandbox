@@ -11,6 +11,14 @@ from localflavor.us.models import USStateField, USZipCodeField
 MAX_LENGTH = 255
 
 
+class BaseAbstractModel(models.Model):
+    """Expanded version of the default Django model."""
+
+    # Self-setting/Non-user-editable fields.
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+
 class User(AbstractUser):
     """Custom user model definition.
     Defined as per the Django docs. Not yet directly used.
@@ -38,7 +46,7 @@ class User(AbstractUser):
             UserProfile.objects.create(user=self)
 
 
-class UserProfile(models.Model):
+class UserProfile(BaseAbstractModel):
     """Basic model to act as a test fk to user model."""
 
     # Relationship Keys.
@@ -52,7 +60,7 @@ class UserProfile(models.Model):
     zipcode = USZipCodeField()
 
 
-class FavoriteFood(models.Model):
+class FavoriteFood(BaseAbstractModel):
     """Basic model to act as a test m2m relation to user model."""
 
     # Relationship Keys.
@@ -60,3 +68,10 @@ class FavoriteFood(models.Model):
 
     # Model fields.
     name = models.CharField(max_length=MAX_LENGTH)
+
+
+class ApiRequestJson(BaseAbstractModel):
+    """Used to retain data for API testing views."""
+
+    # Model fields.
+    json_value = models.CharField(max_length=MAX_LENGTH)

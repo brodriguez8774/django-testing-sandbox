@@ -21,14 +21,15 @@ python_version = "3.11"
 [packages]
 # General Django dependencies.
 django = "< 3.3.0"              # Core Django package, locked to latest 3.2 LTS.
+django-adminlte2-pdq = "*"      # Adds framework for easily styling site like adminlte2.
 django-localflavor = "*"        # Easy implementation of localization info, such as addresses.
+requests = "*"                  # Simple HTTP library. Useful for things like initiating API requests.
 
 ###
  # Development and testing packages, installed via `pipenv sync --dev`.
  ##
 [dev-packages]
 # General dev dependencies.
-django-adminlte2-pdq = "*"      # Adds framework for easily styling site like adminlte2.
 django-debug-toolbar = "*"      # Displays helpful debug-toolbar on side of browser window.
 django-dump-die = "*"           # Dump-and-die debugging tool.
 

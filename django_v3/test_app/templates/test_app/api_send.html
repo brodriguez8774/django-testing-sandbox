@@ -1,0 +1,346 @@
+{% extends "test_app/base.html" %}
+
+
+{% block page_header %}
+  Django LTS v4.2 - API Send
+{% endblock page_header %}
+
+
+{% block page_subheader %}
+  API Send Page
+{% endblock page_subheader %}
+
+
+{% block stylesheets %}
+<style>
+  form h2, form h3, form h4, form h5, form h6,
+  .result-box h2, .result-box h3, .result-box h4, .result-box h5, .result-box h6,
+  .example h2, .example h3, .example h4, .example h5, .example h6 {
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+
+  form {
+    margin: 10px;
+    padding: 15px;
+
+    background-color: #e1e0eb;
+    border: 1px solid grey;
+  }
+
+  form div {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  textarea {
+    width: 100%;
+  }
+
+  input {
+    margin-top: 5px;
+  }
+
+  pre {
+    width: 100%;
+    margin: 5px;
+    padding: 5px;
+    background-color: LightSteelBlue;
+    border: 1px solid grey;
+  }
+
+  pre.allow-break {
+    white-space: pre-wrap;
+  }
+
+  .error {
+    color: red;
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .label p {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .label {
+    width: 10%;
+    padding: 0 10px 0 10px;
+    text-align: right;
+  }
+
+  .help-text {
+    font-size: 70%;
+    font-style: italic;
+    text-align: center;
+  }
+
+  .field {
+    width: 80%;
+    padding: 0 10px 0 10px;
+  }
+
+  .submit-buttons {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .submit-buttons input {
+    margin: 5px;
+    padding: 5px;
+  }
+
+  .example {
+    margin-top: 25px;
+    margin-right: 10px;
+    margin-bottom: 25px;
+    margin-left: 10px;
+    padding: 15px;
+
+    background-color: #e1e0eb;
+    border: 1px solid grey;
+  }
+
+  .result-box {
+    margin-top: 25px;
+    margin-right: 10px;
+    margin-bottom: 25px;
+    margin-left: 10px;
+    padding: 15px;
+
+    background-color: #e1e0eb;
+    border: 1px solid grey;
+  }
+
+  .result-box.sent-data pre {
+    background-color: LightBlue;
+  }
+
+  .italics {
+    margin-top: 5px;
+    margin-bottom: 8px;
+
+    font-size: 90%;
+    font-style: italic;
+    color: #575757;
+  }
+
+  h3.success-return {
+    color: DarkGreen;
+  }
+  div.success-return pre {
+    background-color: #cde4e4;
+  }
+
+  h3.error-return {
+    color: DarkRed;
+  }
+  div.error-return pre {
+    background-color: #d9cde4;
+  }
+</style>
+{% endblock stylesheets %}
+
+
+{% block content %}
+  <p>Use this to generate and send test API requests to other projects.</p>
+
+  <form method="POST">
+    <h2>API Send Form</h2>
+    <p class="italics">Use the below form to send a JSON API ping to the desired url.</p>
+
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="error">
+        <p>Non Field Errors:</p>
+        {{ form.non_field_errors }}
+      </div>
+      <hr>
+    {% endif %}
+
+    {% for field in form %}
+
+      <div>
+        {% if field.errors %}
+          <p class="error"> Field Error:
+          {% for error in field.errors %}
+            {{ error }}
+          {% endfor %}
+          </p>
+        {% endif %}
+
+        <div class="field-group">
+
+          <div class="label">
+            <p>{{ field.label }}:</p>
+            {% if field.help_text %}
+              <p class="help-text">{{ field.help_text|safe }}</p>
+            {% endif %}
+          </div>
+          <div class="field">
+            {{ field }}
+          </div>
+        </div>
+
+      </div>
+
+    {% endfor %}
+
+    <div class="submit-buttons">
+      <input
+        type="submit"
+        name="submit_get"
+        value="Submit as GET"
+        title="Generally used to retrieve data from the server."
+      >
+      <input
+        type="submit"
+        name="submit_post"
+        value="Submit as POST"
+        title="Generally used to send data to the server, and create a new resource."
+      >
+      <input
+        type="submit"
+        name="submit_put"
+        value="Submit as PUT"
+        title="Generally used to send data to the server, and update an existing resource by full replacement."
+      >
+      <input
+        type="submit"
+        name="submit_patch"
+        value="Submit as PATCH"
+        title="Generally used to send data to the server, and update an existing resource by partial replacement."
+      >
+      <input
+        type="submit"
+        name="submit_delete"
+        value="Submit as DELETE"
+        title="Generally used to send data to the server, and delete an existing resource."
+      >
+    </div>
+  </form>
+
+  <div class="result-box">
+    <h2>Parsed Return-Response</h2>
+
+    {% if response_error or response_success %}
+      <p class="italics">This is the data that was returned after the previous API send.</p>
+    {% endif %}
+
+    {% if response_success %}
+      <h3 class="success-return">Success Sending API Ping</h3>
+      {% for key, value in response_success.items %}
+        <div class="field-group success-return">
+          <div class="label">
+            <p>{{ key }}</p>
+          </div>
+          <pre class="allow-break">{{ value }}</pre>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    {% if response_error %}
+      <h3 class="error-return">Error Sending API Ping</h3>
+      {% for key, value in response_error.items %}
+        <div class="field-group error-return">
+          <div class="label">
+            <p>{{ key }}</p>
+          </div>
+          <pre class="allow-break">{{ value }}</pre>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    {% if not response_error and not response_success %}
+      <p class="italics">No return value yet. Submit the API form and the resulting return response will display here.</p>
+    {% endif %}
+  </div>
+
+  {% if sent_data %}
+    <div class="result-box sent-data">
+      <h2>Sent Data</h2>
+      <p class="italics">This is what was sent out from this form, on the previous API call.</p>
+      {% for key, value in sent_data.items %}
+        <div class="field-group">
+          <div class="label">
+            <p>{{ key }}</p>
+          </div>
+          <pre class="allow-break">{{ value }}</pre>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="example">
+    <h2>Example Send Values:</h2>
+
+    <p>Below are some example form values to get started.</p>
+
+    <div class="field-group">
+      <div class="label">
+        <p>
+          Url:
+        </p>
+      </div>
+      <pre>http://127.0.0.1:8000/test_app/api/parse/</pre>
+    </div>
+    <div class="field-group">
+      <div class="label">
+        <p>
+          Get Params:
+        </p>
+      </div>
+      <pre>test-param-1=Abc&test-param-2=123</pre>
+    </div>
+    <div class="field-group">
+      <div class="label">
+        <p>
+          Header Token:
+        </p>
+      </div>
+      <pre>MyExampleHeaderAuthToken-112233445566778899ABABCDCD</pre>
+    </div>
+    <div class="field-group">
+      <div class="label">
+        <p>
+          Payload:
+        </p>
+      </div>
+      <pre>{
+  "test": true,
+  "Aaa": "Bbb",
+  "MyNumber": 5
+}</pre>
+    </div>
+
+  <hr>
+
+  <p>Above values will send:</p>
+  <div class="field-group">
+    <pre>url: http://127.0.0.1:8000/test_app/api/parse/?test-param-1=Abc&test-param-2=123
+
+header: {
+  "Accept": "application/json",
+  "token": "MyExampleHeaderAuthToken-112233445566778899ABABCDCD"
+}
+
+data: {
+  "test": true,
+  "Aaa": "Bbb",
+  "MyNumber": 5
+}</pre>
+  </div>
+
+  </div>
+
+{% endblock content %}

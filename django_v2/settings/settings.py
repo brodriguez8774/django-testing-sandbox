@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'test_app.apps.TestAppConfig',
 
     # DjangoDD Package.
-    'django_dump_die',
+    # 'django_dump_die',
 
     # DjangoETC Package.
     'django_expanded_test_cases',
@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     # Package middleware.
-    'django_dump_die.middleware.DumpAndDieMiddleware',
+    # 'django_dump_die.middleware.DumpAndDieMiddleware',
 
     # Built-in Django middleware.
     'django.middleware.security.SecurityMiddleware',

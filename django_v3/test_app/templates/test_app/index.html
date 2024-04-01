@@ -7,18 +7,49 @@
 
 {% block content %}
   <p>Test Page Content</p>
+
+  {% if is_class_view %}
+    <p><a href="{% url 'test_app:index' %}">Render page from Function view</a></p>
+  {% else %}
+    <p><a href="{% url 'test_app:index_as_class' %}">Render page from Class view</a></p>
+  {% endif %}
+
   <ul>
     <li>
-      <p><a href="{% url 'root_project_home_page:index' %}">Back to Django v2.2 Home</a></p>
+      <p>Standard Views:</p>
+      <ul>
+        <li>
+          <p><a href="{% url 'root_project_home_page:index' %}">Back to Django v3.2 Home</a></p>
+        </li>
+        <li>
+          <p><a href="{% url 'test_app:view_with_login_check' %}">Test App - Login Check Page</a></p>
+        </li>
+        <li>
+          <p><a href="{% url 'test_app:view_with_permission_check' %}">Test App - Permission Check Page</a></p>
+        </li>
+        <li>
+          <p><a href="{% url 'test_app:view_with_group_check' %}">Test App - Group Check Page</a></p>
+        </li>
+      </ul>
     </li>
     <li>
-      <p><a href="{% url 'test_app:view_with_login_check' %}">Test App - Login Check Page</a></p>
-    </li>
-    <li>
-      <p><a href="{% url 'test_app:view_with_permission_check' %}">Test App - Permission Check Page</a></p>
-    </li>
-    <li>
-      <p><a href="{% url 'test_app:view_with_group_check' %}">Test App - Group Check Page</a></p>
+      <p>API Views:</p>
+      <ul>
+        <li>
+          <p><a href="{% url 'test_app:api_parse' %}">API Parse - Receive API requests here to parse them.</a></p>
+        </li>
+        <li>
+          <p><a href="{% url 'test_app:api_display' %}">API Display - View parsed API requests here.</a></p>
+          <p>
+            Note: Only displays the first received API request since last access of api_display view.
+            <br>
+            All parsed API data is purged after page access.
+          </p>
+        </li>
+        <li>
+          <p><a href="{% url 'test_app:api_send' %}">API Send - Generate and send API requests here.</a></p>
+        </li>
+      </ul>
     </li>
   </ul>
 {% endblock content %}
