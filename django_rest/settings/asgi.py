@@ -1,5 +1,5 @@
 """
-ASGI config for Django v4.1 test project.
+ASGI config for Django REST test project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

@@ -1,5 +1,5 @@
 """
-WSGI config for Django v4.1 test project.
+WSGI config for Django REST test project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

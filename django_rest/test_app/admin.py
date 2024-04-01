@@ -1,5 +1,5 @@
 """
-Admin views for Django v4.1 test project app.
+Admin views for Django REST test project app.
 """
 
 # Third-Party Imports.

@@ -1,5 +1,5 @@
 """
-Views for Django v4.2 test project app.
+Views for Django REST test project app.
 """
 
 # System Imports.

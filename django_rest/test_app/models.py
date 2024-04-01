@@ -1,5 +1,5 @@
 """
-Models for Django v4.1 test project app.
+Models for Django REST test project app.
 """
 
 # Third-Party Imports.

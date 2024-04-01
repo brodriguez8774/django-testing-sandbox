@@ -1,5 +1,5 @@
 """
-View tests for Django v4.1 test project app.
+View tests for Django REST test project app.
 
 Uses ETC package logic to execute.
 Should otherwise be fairly similar to the "base_tests", as a way to
@@ -71,7 +71,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test App Index', page_content)
+            self.assertIn('Django REST - Test App Index', page_content)
 
         with self.subTest('Check views using admin user'):
             # Get response object.
@@ -82,7 +82,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test App Index', page_content)
+            self.assertIn('Django REST - Test App Index', page_content)
 
         with self.subTest('Check views using inactive user'):
             # Get response object.
@@ -93,7 +93,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test App Index', page_content)
+            self.assertIn('Django REST - Test App Index', page_content)
 
         with self.subTest('Check views using standard user'):
             # Get response object.
@@ -104,7 +104,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test App Index', page_content)
+            self.assertIn('Django REST - Test App Index', page_content)
 
         with self.subTest('Check views using new user'):
             # Generate user model.
@@ -122,7 +122,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test App Index', page_content)
+            self.assertIn('Django REST - Test App Index', page_content)
 
     def test__assert_login_view(self):
         """Verifies that login view can be accessed as expected."""
@@ -135,7 +135,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -151,7 +151,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Login Check', page_content)
+            self.assertIn('Django REST - Test Login Check', page_content)
             self.assertIn('This view should require user login to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -164,7 +164,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Login Check', page_content)
+            self.assertIn('Django REST - Test Login Check', page_content)
             self.assertIn('This view should require user login to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -177,7 +177,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -193,7 +193,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Login Check', page_content)
+            self.assertIn('Django REST - Test Login Check', page_content)
             self.assertIn('This view should require user login to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -213,7 +213,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Login Check', page_content)
+            self.assertIn('Django REST - Test Login Check', page_content)
             self.assertIn('This view should require user login to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -237,7 +237,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -253,7 +253,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Permission Check', page_content)
+            self.assertIn('Django REST - Test Permission Check', page_content)
             self.assertIn('This view should require permission of "test_permission" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -269,7 +269,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Permission Check', page_content)
+            self.assertIn('Django REST - Test Permission Check', page_content)
             self.assertIn('This view should require permission of "test_permission" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -282,7 +282,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertNotIn('Please login to see this page.', page_content)
             self.assertIn('Your account doesn\'t have access to this page. To proceed,', page_content)
@@ -303,7 +303,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Permission Check', page_content)
+            self.assertIn('Django REST - Test Permission Check', page_content)
             self.assertIn('This view should require permission of "test_permission" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -316,7 +316,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -335,7 +335,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -351,7 +351,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertNotIn('Please login to see this page.', page_content)
             self.assertIn('Your account doesn\'t have access to this page. To proceed,', page_content)
@@ -372,7 +372,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Permission Check', page_content)
+            self.assertIn('Django REST - Test Permission Check', page_content)
             self.assertIn('This view should require permission of "test_permission" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -392,7 +392,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertNotIn('Please login to see this page.', page_content)
             self.assertIn('Your account doesn\'t have access to this page. To proceed,', page_content)
@@ -413,7 +413,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Permission Check', page_content)
+            self.assertIn('Django REST - Test Permission Check', page_content)
             self.assertIn('This view should require permission of "test_permission" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -432,7 +432,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -448,7 +448,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Group Check', page_content)
+            self.assertIn('Django REST - Test Group Check', page_content)
             self.assertIn('This view should require group of "test_group" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -464,7 +464,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Group Check', page_content)
+            self.assertIn('Django REST - Test Group Check', page_content)
             self.assertIn('This view should require group of "test_group" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -477,7 +477,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertNotIn('Please login to see this page.', page_content)
             self.assertNotIn('Your account doesn\'t have access to this page. To proceed,', page_content)
@@ -498,7 +498,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Group Check', page_content)
+            self.assertIn('Django REST - Test Group Check', page_content)
             self.assertIn('This view should require group of "test_group" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -511,7 +511,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -530,7 +530,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertIn('Please login to see this page.', page_content)
             self.assertIn('Username:', page_content)
@@ -546,7 +546,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertNotIn('Please login to see this page.', page_content)
             self.assertNotIn('Your account doesn\'t have access to this page. To proceed,', page_content)
@@ -567,7 +567,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Group Check', page_content)
+            self.assertIn('Django REST - Test Group Check', page_content)
             self.assertIn('This view should require group of "test_group" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)
 
@@ -587,7 +587,7 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Login Page', page_content)
+            self.assertIn('Django REST - Login Page', page_content)
             self.assertIn('You need to login to continue.', page_content)
             self.assertNotIn('Please login to see this page.', page_content)
             self.assertNotIn('Your account doesn\'t have access to this page. To proceed,', page_content)
@@ -608,6 +608,6 @@ class ViewTestCase(IntegrationTestCase):
 
             # Various checks to ensure page is the one we expect.
             page_content = response.content.decode('utf-8')
-            self.assertIn('Django LTS v4.1 - Test Group Check', page_content)
+            self.assertIn('Django REST - Test Group Check', page_content)
             self.assertIn('This view should require group of "test_group" to see.', page_content)
             self.assertIn('Back to Test App Views', page_content)

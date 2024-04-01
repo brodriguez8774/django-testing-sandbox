@@ -19,7 +19,7 @@ function main () {
     # Clear any current output in terminal.
     clear
 
-    echo -e "${text_blue}Starting project setup for Django v4.1 test environment...${text_reset}"
+    echo -e "${text_blue}Starting project setup for Django REST test environment...${text_reset}"
     echo ""
 
     # Import corresponding virtual environment, if not already done.

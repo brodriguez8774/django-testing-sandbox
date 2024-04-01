@@ -1,5 +1,5 @@
 """
-Urls for Django v4.1 test project app.
+Urls for Django v4.2 test project app.
 """
 
 # Third-Party Imports.

@@ -1,5 +1,5 @@
 """
-App definition for Django v4.1 test project app.
+App definition for Django REST test project app.
 """
 
 # Third-Party Imports.
