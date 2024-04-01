@@ -25,6 +25,8 @@ urlpatterns = [
     # Test REST API views.
     path('api/api-token-auth', rest_views.obtain_auth_token, name='api_token_auth'),
 
+    # Test app root, but as a class.
+    path('as_class', views.ExampleClassView.as_view(), name='index_as_class'),
     # App root.
     path('', views.index, name='index')
 ]

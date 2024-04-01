@@ -10,12 +10,12 @@ import requests
 
 # Third-Party Imports.
 from django.contrib.auth.decorators import login_required, permission_required
-from django.http import HttpResponse, JsonResponse, QueryDict
+from django.http import JsonResponse, QueryDict
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView
 from django.shortcuts import redirect, render, reverse
-from django.views.generic.edit import FormMixin
+
 # Internal Imports.
 from test_app.forms import ApiSendForm
 from test_app.models import ApiRequestJson
@@ -31,34 +31,6 @@ def root_project_home_page(request):
 def index(request):
     """Test app index page."""
     return render(request, 'test_app/index.html')
-
-# endregion Index/Root Views
-
-
-# region Login/Permission Test Views
-
-@login_required
-def view_with_login_check(request):
-    """Test view with basic login check."""
-    return render(request, 'test_app/login_check.html')
-
-
-@permission_required('test_app.test_permission')
-def view_with_permission_check(request):
-    """Test view with basic User permission check."""
-    return render(request, 'test_app/permission_check.html')
-
-
-@login_required
-def view_with_group_check(request):
-    """Test view with basic User group check."""
-
-    # Check group.
-    user_groups = request.user.groups.all().values_list('name', flat=True)
-    if 'test_group' not in user_groups and not request.user.is_superuser:
-        return redirect(reverse('login'))
-
-    return render(request, 'test_app/group_check.html')
 
 
 class ExampleClassView(TemplateView):
@@ -175,6 +147,34 @@ class ExampleClassView(TemplateView):
 
         # Replace this with a `reverse()` call to generate the correct URL.
         return super().get_redirect_url()
+
+# endregion Index/Root Views
+
+
+# region Login/Permission Test Views
+
+@login_required
+def view_with_login_check(request):
+    """Test view with basic login check."""
+    return render(request, 'test_app/login_check.html')
+
+
+@permission_required('test_app.test_permission')
+def view_with_permission_check(request):
+    """Test view with basic User permission check."""
+    return render(request, 'test_app/permission_check.html')
+
+
+@login_required
+def view_with_group_check(request):
+    """Test view with basic User group check."""
+
+    # Check group.
+    user_groups = request.user.groups.all().values_list('name', flat=True)
+    if 'test_group' not in user_groups and not request.user.is_superuser:
+        return redirect(reverse('login'))
+
+    return render(request, 'test_app/group_check.html')
 
 # endregion Login/Permission Test Views
 
