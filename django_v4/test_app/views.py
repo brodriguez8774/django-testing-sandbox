@@ -13,8 +13,9 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse, JsonResponse, QueryDict
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.views.generic import TemplateView, View
 from django.shortcuts import redirect, render, reverse
-
+from django.views.generic.edit import FormMixin
 # Internal Imports.
 from test_app.forms import ApiSendForm
 from test_app.models import ApiRequestJson
@@ -58,6 +59,122 @@ def view_with_group_check(request):
         return redirect(reverse('login'))
 
     return render(request, 'test_app/group_check.html')
+
+
+class ExampleClassView(TemplateView):
+    """A basic Class Django view,
+    with some of the more common built-in methods and documentation of what they do.
+
+    Note: Some of these methods won't do anything with TemplateView. For example,
+          the form valid/invalid methods require a class that will POST form data.
+          Such as CreateView or UpdateView.
+    """
+
+    # Magic DjangoView args. Often times, can just define these and skip most method calls.
+
+    # Template to render.
+    template_name = 'test_app/index.html'
+
+    # Url to use if redirecting.
+    # If args/kwargs are needed, then probably need to use get_redirect_url() instead.
+    url = None
+
+    # If using a ModelView (ListView, DetailView, etc), these define what model data to call with.
+    model = None
+    queryset = None     # Can call more complicated query logic in get_queryset().
+
+    # If using a ListView, this determines the number of results to display per page with pagination.
+    paginate_by = 25
+
+    # Params for views with form logic.
+    form_class = None       # Form class to use.
+    initial = {}            # Initial data to populate into form, if applicable.
+    success_url = None      # If args/kwargs are needed, then probably need to use get_success_url() instead.
+
+    def dispatch(self, request, *args, **kwargs):
+        """Determines initial logic to call on view access.
+        This is one of the first methods called by Django class views.
+        This determines which of [GET(), POST(), etc] base class handling methods are called.
+        If you need redirecting or other logic prior to calling these, do it here.
+
+        If not redirecting outside of this class, then should probably always finish
+        this function by returning a call to the original dispatch method.
+        """
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        """Pulls additional context data to be used in the template."""
+
+        # Get base context object.
+        context = super().get_context_data(**kwargs)
+
+        # Add new value to context.
+        context['is_class_view'] = True
+
+        # Return context.
+        return context
+
+    def get_queryset(self):
+        """If using a view that uses models (DetailView, ListView, etc), then this modifies the default queryset."""
+        queryset = super().get_queryset()
+
+        # Use additional model query logic here.
+
+        # Return our modified queryset.
+        return queryset
+
+    def get_ordering(self):
+        """Return the field or fields to use for ordering the queryset."""
+
+        # Replace this with a return to a single model field or list of model fields to order by.
+        return super().get_ordering()
+
+    def get(self, request, *args, **kwargs):
+        """Handling for GET response type."""
+
+        # Replace this with a response object.
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """Handling for POST response type."""
+
+        # Replace this with either a response object, or a call to
+        # form_valid()/form_invalid() functions. Depending on what you need for class logic.
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        """When processing a form, this is the logic to run on form validation success."""
+
+        # Call parent logic. Should always include this line, as default views sometimes do additional processing.
+        response = super().form_valid(form)
+
+        # Do some handling with response here.
+
+        # Return some response object for render.
+        return response
+
+    def form_invalid(self, form):
+        """When processing a form, this is the logic to run on form validation failure."""
+
+        # Call parent logic. Should always include this line, as default views sometimes do additional processing.
+        response = super().form_invalid(form)
+
+        # Do some handling with response here.
+
+        # Return some response object for render.
+        return response
+
+    def get_success_url(self):
+        """When processing a form, determines how to get the url for form success redirect."""
+
+        # Replace this with a `reverse()` call to generate the correct URL.
+        return super().get_success_url()
+
+    def get_redirect_url(self, *args, **kwargs):
+        """When handling a redirect view, this determines how to get the url."""
+
+        # Replace this with a `reverse()` call to generate the correct URL.
+        return super().get_redirect_url()
 
 # endregion Login/Permission Test Views
 

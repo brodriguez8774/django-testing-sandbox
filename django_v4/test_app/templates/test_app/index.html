@@ -7,6 +7,13 @@
 
 {% block content %}
   <p>Test Page Content</p>
+
+  {% if is_class_view %}
+    <p><a href="{% url 'test_app:index' %}">Render page from Function view</a></p>
+  {% else %}
+    <p><a href="{% url 'test_app:index_as_class' %}">Render page from Class view</a></p>
+  {% endif %}
+
   <ul>
     <li>
       <p>Standard Views:</p>

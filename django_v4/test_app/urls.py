@@ -21,6 +21,8 @@ urlpatterns = [
     path('api/display/', views.api_display, name='api_display'),
     path('api/send/', views.api_send, name='api_send'),
 
+    # Test app root, but as a class.
+    path('as_class', views.ExampleClassView.as_view(), name='index_as_class'),
     # App root.
     path('', views.index, name='index')
 ]
