@@ -9,7 +9,7 @@ Each project has minimal adjustments to settings file, essentially using the def
 version of Django.
 
 Each project also has common things set up, such as a view that requires a user login to access, a view that requires
-a specific permissions to access, etc.
+a specific permissions to access, some basic API views, etc.
 
 The goal is to be able to easily/quickly test various common properties of Django projects, across multiple Django
 versions.
@@ -20,13 +20,18 @@ versions.
 Currently included in this project are:
 
 | Django Version | Version Notes     | Official Support End |
-| -------------- | ----------------- | -------------------- |
-| Django v4.1    | See below note    | December 2023        |
-| Django v3.2    | LTS               | April 2024           |
+|----------------|-------------------|----------------------|
+| Django v5.0    | Feature Release   | Aug 2025             |
+| Django v4.2    | LTS               | April 2026           |
+| Django v3.2    | LTS (End of Life) | No Longer Supported  |
 | Django v2.2    | LTS (End of Life) | No Longer Supported  |
 
-Version 4.1 currently included because 4.x LTS is not yet out.
-Will switch over once v4 LTS is released.
+This project will try to always update to include LTS versions.
+When "feature release" versions are included, they will be updated to the next
+LTS version as soon as possible.
+
+See https://www.djangoproject.com/download/#supported-versions for Django
+versioning and LTS details.
 
 
 ## Running Project
