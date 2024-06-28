@@ -1,5 +1,5 @@
 """
-Model tests for Django v4.2 test project app.
+Model tests for Django v5.0 test project app.
 
 Uses ETC package logic to execute.
 Should otherwise be fairly similar to the "base_tests", as a way to

@@ -1,5 +1,5 @@
 """
-Models for Django v4.2 test project app.
+Models for Django v5.0 test project app.
 """
 
 # Third-Party Imports.

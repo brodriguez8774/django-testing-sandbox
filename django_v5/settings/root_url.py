@@ -1,5 +1,5 @@
 """
-Root Url for Django v4.2 test project.
+Root Url for Django v5.0 test project.
 """
 
 # Third-Party Imports.

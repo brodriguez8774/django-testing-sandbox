@@ -1,5 +1,5 @@
 """
-Django v4.2 test project URL Configuration
+Django v5.0 test project URL Configuration
 """
 
 from django.contrib import admin

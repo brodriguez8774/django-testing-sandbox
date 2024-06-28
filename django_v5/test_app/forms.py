@@ -1,5 +1,5 @@
 """
-Forms for Django v4.2 test project app.
+Forms for Django v5.0 test project app.
 """
 
 # System Imports.

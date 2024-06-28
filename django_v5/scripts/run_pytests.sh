@@ -19,7 +19,7 @@ function main () {
     # Clear any current output in terminal.
     clear
 
-    echo -e "${text_blue}Starting project setup for Django v4.2 test environment...${text_reset}"
+    echo -e "${text_blue}Starting project setup for Django v5.0 test environment...${text_reset}"
     echo ""
 
     # Import corresponding virtual environment, if not already done.
@@ -31,7 +31,7 @@ function main () {
 
     # Ensure latest versions of all corresponding dependencies are installed.
     # Because this project is assumed to only be used in local development,
-    # we only care about having a consistent Django major LTS version, and then
+    # we only care about having a consistent Django major Feature Release version, and then
     # otherwise always wanting the latest versions/bugfixes of all other
     # corresponding packages used.
     pipenv install --dev
