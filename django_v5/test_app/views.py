@@ -352,7 +352,7 @@ def api_send(request):
 
             url = str(form.cleaned_data['url']).strip()
             get_params = str(form.cleaned_data.get('get_params', '')).strip()
-            header_token = str(form.cleaned_data.get('header_token', '')).strip()
+            header_params = str(form.cleaned_data.get('header_params', '')).strip()
             payload = str(form.cleaned_data.get('payload', '{}')).strip()
             if len(payload) > 0:
                 try:
@@ -379,8 +379,16 @@ def api_send(request):
 
             # Determine header values.
             headers = {'Accept': 'application/json'}
-            if header_token:
-                headers['token'] = header_token
+            if len(payload) > 0:
+                try:
+                    payload = json.loads(payload)
+                except json.decoder.JSONDecodeError:
+                    has_error = True
+                    payload = {}
+                    form.add_error(
+                        'payload',
+                        'Unrecognized/invalid JSON syntax. Please double check syntax and try again.',
+                    )
 
             # Determine data values.
             if payload:

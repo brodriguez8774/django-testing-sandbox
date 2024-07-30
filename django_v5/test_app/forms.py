@@ -19,10 +19,10 @@ class ApiSendForm(forms.Form):
         widget=forms.Textarea(attrs={'rows': '6'}),
         help_text='Optional URL get param to append to URL.',
     )
-    header_token = forms.CharField(
+    header_params = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={'rows': '6'}),
-        help_text='Optional token to put into request header, such as required for API authentication.'
+        help_text='Optional dict of data to put into request header, such as values required for API authentication.'
     )
     payload = forms.CharField(
         required=False,
